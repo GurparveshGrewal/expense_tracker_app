@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "884504518933",
+    "project_id": "expends-app",
+    "storage_bucket": "expends-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884504518933:android:d161bfd829f00d211cc91c",
+        "android_client_info": {
+          "package_name": "com.example.expense_tracker_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVjirVkYnuKI67t8nvhcOORj9VYl-fdAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

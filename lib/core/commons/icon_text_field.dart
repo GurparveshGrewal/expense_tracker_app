@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 
 class IconTextFieldWidget extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
   final IconData icon;
-
-  const IconTextFieldWidget({required this.icon, super.key});
+  final TextInputType inputType;
+  final bool passwordField;
+  const IconTextFieldWidget(
+      {required this.controller,
+      required this.icon,
+      this.hintText = '',
+      this.inputType = TextInputType.text,
+      this.passwordField = false,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: inputType,
+      obscureText: passwordField,
       decoration: InputDecoration(
+        hintText: hintText,
         prefixIcon: Icon(
           icon,
           size: 20,
