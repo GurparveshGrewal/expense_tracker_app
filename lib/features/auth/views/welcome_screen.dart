@@ -116,7 +116,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             .titleLarge!
                             .copyWith(fontWeight: FontWeight.bold),
                         labelColor: Colors.white,
-                        unselectedLabelColor: Colors.grey.shade600,
                         tabs: const [
                           Padding(
                             padding: EdgeInsets.all(12),
