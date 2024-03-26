@@ -1,7 +1,7 @@
+import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
 import 'package:expense_tracker_app/features/home/widgets/stat_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -17,8 +17,8 @@ class MainScreen extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  height: 60,
-                  width: 60,
+                  height: 50,
+                  width: 50,
                   decoration: BoxDecoration(
                       color: Colors.yellow.shade700,
                       borderRadius: BorderRadius.circular(50)),
@@ -67,12 +67,40 @@ class MainScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const Text(
-              "Transactions",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
+            Row(
+              children: [
+                const Text(
+                  "Transactions",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(foregroundColor: Colors.grey),
+                  child: const Text(
+                    "See All",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return ExpenseCard(
+                      icon: Icons.food_bank_outlined,
+                      backgroundColor: index % 2 == 0
+                          ? Theme.of(context).colorScheme.secondary
+                          : Theme.of(context).colorScheme.primary,
+                    );
+                  }),
             )
           ],
         ),
