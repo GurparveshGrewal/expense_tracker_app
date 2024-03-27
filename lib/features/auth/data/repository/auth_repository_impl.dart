@@ -25,6 +25,25 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
+  Future<MyUser> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final user = await _firebaseAuthWrapper.signInWithEmailAndPassword(
+          email: email, password: password);
+
+      if (user != null) {
+        return MyUser(uid: user.uid, fullName: "fullName", email: email);
+      }
+
+      return MyUser.empty;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<MyUser> getCurrentUser() async {
     try {
       final currentUser = _firebaseAuthWrapper.currentUser;

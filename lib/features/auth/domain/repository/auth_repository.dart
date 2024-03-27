@@ -6,5 +6,10 @@ abstract class AuthRepository {
       required String password,
       required String fullName});
 
+  Future<MyUser> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  });
+
   Future<MyUser> getCurrentUser();
 }

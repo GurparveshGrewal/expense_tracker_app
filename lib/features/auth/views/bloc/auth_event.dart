@@ -16,3 +16,13 @@ class AuthSignUpProcessEvent extends AuthEvent {
     required this.fullName,
   });
 }
+
+class AuthSignInProcessEvent extends AuthEvent {
+  final String email;
+  final String password;
+
+  AuthSignInProcessEvent({
+    required this.email,
+    required this.password,
+  });
+}

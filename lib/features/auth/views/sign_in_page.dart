@@ -56,7 +56,13 @@ class _SignInPageState extends State<SignInPage> {
                   const SizedBox(
                     height: 30,
                   ),
-                  CommonGradientButton(buttonTitle: "SIGN IN", onTap: () {}),
+                  CommonGradientButton(
+                      buttonTitle: "SIGN IN",
+                      onTap: () {
+                        context.read<AuthBloc>().add(AuthSignInProcessEvent(
+                            email: emailTextController.text.trim(),
+                            password: passwordTextController.text.trim()));
+                      }),
                 ],
               ),
             );
