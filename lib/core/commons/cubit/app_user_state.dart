@@ -9,3 +9,7 @@ final class AppUserLoggedIn extends AppUserState {
   final MyUser currentUser;
   AppUserLoggedIn(this.currentUser);
 }
+
+final class AppUserLoggedOut extends AppUserState {
+  AppUserLoggedOut();
+}

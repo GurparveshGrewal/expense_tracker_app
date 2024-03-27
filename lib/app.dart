@@ -1,5 +1,6 @@
 import 'package:expense_tracker_app/app_view.dart';
 import 'package:expense_tracker_app/core/commons/cubit/app_user_cubit.dart';
+import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:expense_tracker_app/features/home/views/home_page.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +31,19 @@ class _MyAppState extends State<MyApp> {
               secondary: const Color(0xFFE064F7),
               tertiary: const Color(0xFFFF8D6C),
               outline: Colors.grey)),
-      home: BlocSelector<AppUserCubit, AppUserState, bool>(
+      home: BlocSelector<AppUserCubit, AppUserState, MyUser?>(
         selector: (state) {
-          return state is AppUserLoggedIn;
+          if (state is AppUserLoggedIn) {
+            return state.currentUser;
+          } else {
+            return null;
+          }
         },
-        builder: (context, isUserLoggedIn) {
-          if (isUserLoggedIn) {
-            return const HomePage();
+        builder: (context, currentUser) {
+          if (currentUser != null) {
+            return HomePage(
+              myUser: currentUser,
+            );
           } else {
             return const MyAppView();
           }

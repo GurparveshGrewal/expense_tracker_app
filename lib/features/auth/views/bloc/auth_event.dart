@@ -26,3 +26,5 @@ class AuthSignInProcessEvent extends AuthEvent {
     required this.password,
   });
 }
+
+class AuthSignOutEvent extends AuthEvent {}

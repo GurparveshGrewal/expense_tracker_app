@@ -1,10 +1,16 @@
 import 'package:expense_tracker_app/core/wrappers/firebase_auth_wrapper.dart';
+import 'package:expense_tracker_app/core/wrappers/firestore_database_wrapper.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/auth/domain/repository/auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final FirebaseAuthWrapper _firebaseAuthWrapper;
-  AuthRepositoryImpl(this._firebaseAuthWrapper);
+  final FirestoreDatabaseWrapper _firestoreDatabaseWrapper;
+  AuthRepositoryImpl(
+    this._firebaseAuthWrapper,
+    this._firestoreDatabaseWrapper,
+  );
+
   @override
   Future<MyUser> signUpWithEmailAndPassword(
       {required String email,
@@ -15,6 +21,11 @@ class AuthRepositoryImpl extends AuthRepository {
           email: email, password: password);
 
       if (user != null) {
+        await _firestoreDatabaseWrapper.addUserToDatabase(uid: user.uid, data: {
+          "fullName": fullName,
+          "email": email,
+          "createdAt": DateTime.now().toIso8601String(),
+        });
         return MyUser(uid: user.uid, fullName: fullName, email: email);
       }
 
@@ -34,7 +45,11 @@ class AuthRepositoryImpl extends AuthRepository {
           email: email, password: password);
 
       if (user != null) {
-        return MyUser(uid: user.uid, fullName: "fullName", email: email);
+        final rawData =
+            await _firestoreDatabaseWrapper.getUserData(uid: user.uid);
+
+        return MyUser(
+            uid: user.uid, fullName: rawData['fullName'], email: email);
       }
 
       return MyUser.empty;
@@ -56,6 +71,15 @@ class AuthRepositoryImpl extends AuthRepository {
       }
 
       return MyUser.empty;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    try {
+      await _firebaseAuthWrapper.signOut();
     } catch (e) {
       rethrow;
     }

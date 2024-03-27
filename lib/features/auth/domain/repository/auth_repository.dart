@@ -11,5 +11,7 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<void> signOut();
+
   Future<MyUser> getCurrentUser();
 }

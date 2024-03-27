@@ -1,10 +1,14 @@
+import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
+import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
 import 'package:expense_tracker_app/features/home/widgets/stat_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  final MyUser currentUser;
+  const MainScreen({required this.currentUser, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +45,9 @@ class MainScreen extends StatelessWidget {
                           color: Theme.of(context).colorScheme.outline,
                           fontWeight: FontWeight.w600),
                     ),
-                    const Text(
-                      "Grewal",
-                      style: TextStyle(
+                    Text(
+                      currentUser.fullName,
+                      style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
@@ -53,9 +57,11 @@ class MainScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<AuthBloc>().add(AuthSignOutEvent());
+                    },
                     icon: const Icon(
-                      CupertinoIcons.settings,
+                      Icons.logout_sharp,
                       size: 30,
                     )),
               ],

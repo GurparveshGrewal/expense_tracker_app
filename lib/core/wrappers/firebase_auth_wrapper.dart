@@ -35,4 +35,12 @@ class FirebaseAuthWrapper {
       rethrow;
     }
   }
+
+  Future<void> signOut() async {
+    try {
+      await _firebaseAuth.signOut();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
