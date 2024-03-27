@@ -1,5 +1,5 @@
-import 'package:expense_tracker_app/core/commons/common_gradient_button.dart';
-import 'package:expense_tracker_app/core/commons/icon_text_field.dart';
+import 'package:expense_tracker_app/core/commons/widgets/common_gradient_button.dart';
+import 'package:expense_tracker_app/core/commons/widgets/icon_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

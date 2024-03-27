@@ -1,6 +1,10 @@
-import 'package:expense_tracker_app/core/commons/common_gradient_button.dart';
-import 'package:expense_tracker_app/core/commons/icon_text_field.dart';
+import 'package:expense_tracker_app/core/commons/widgets/common_gradient_button.dart';
+import 'package:expense_tracker_app/core/commons/widgets/icon_text_field.dart';
+import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
+import 'package:expense_tracker_app/core/utils/show_snackbar.dart';
+import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignInPage extends StatefulWidget {
@@ -19,31 +23,44 @@ class _SignInPageState extends State<SignInPage> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: Form(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconTextFieldWidget(
-                controller: emailTextController,
-                inputType: TextInputType.emailAddress,
-                icon: Icons.email,
-                hintText: 'Email',
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthUserLogInSuccessState) {
+              showSnackBar(context, "Auth Success");
+            } else if (state is AuthUserLogInFailedState) {
+              showSnackBar(context, "Auth Failed");
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthLoadingState) return const Loader();
+
+            return Form(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconTextFieldWidget(
+                    controller: emailTextController,
+                    inputType: TextInputType.emailAddress,
+                    icon: Icons.email,
+                    hintText: 'Email',
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  IconTextFieldWidget(
+                    controller: passwordTextController,
+                    icon: FontAwesomeIcons.lock,
+                    hintText: 'Password',
+                    passwordField: true,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  CommonGradientButton(buttonTitle: "SIGN IN", onTap: () {}),
+                ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              IconTextFieldWidget(
-                controller: passwordTextController,
-                icon: FontAwesomeIcons.lock,
-                hintText: 'Password',
-                passwordField: true,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              CommonGradientButton(buttonTitle: "SIGN IN", onTap: () {}),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

@@ -17,6 +17,7 @@ class IconTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       keyboardType: inputType,
       obscureText: passwordField,
       decoration: InputDecoration(
