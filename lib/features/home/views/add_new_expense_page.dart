@@ -1,4 +1,5 @@
-import 'package:expense_tracker_app/core/commons/icon_text_field.dart';
+import 'package:expense_tracker_app/core/commons/widgets/common_gradient_button.dart';
+import 'package:expense_tracker_app/core/commons/widgets/icon_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -7,6 +8,9 @@ class AddNewExpensePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController expenseTextController = TextEditingController();
+    final TextEditingController noteTextController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -48,20 +52,25 @@ class AddNewExpensePage extends StatelessWidget {
                           SizedBox(
                             height: 80,
                             width: MediaQuery.of(context).size.width * 0.8,
-                            child: const IconTextFieldWidget(
+                            child: IconTextFieldWidget(
+                              controller: expenseTextController,
                               icon: FontAwesomeIcons.dollarSign,
                             ),
                           ),
                           const SizedBox(height: 30),
-                          const IconTextFieldWidget(
+                          IconTextFieldWidget(
+                            controller: expenseTextController,
                             icon: FontAwesomeIcons.list,
                           ),
                           const SizedBox(height: 20),
-                          const IconTextFieldWidget(
+                          IconTextFieldWidget(
+                            controller: noteTextController,
                             icon: Icons.note_alt,
                           ),
                           const SizedBox(height: 20),
-                          const IconTextFieldWidget(
+                          // TODO : remove unwanted text fields.
+                          IconTextFieldWidget(
+                            controller: expenseTextController,
                             icon: FontAwesomeIcons.calendarDay,
                           )
                         ],
@@ -71,35 +80,7 @@ class AddNewExpensePage extends StatelessWidget {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                print("clicked Save");
-              },
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.tertiary,
-                      Theme.of(context).colorScheme.secondary,
-                      Theme.of(context).colorScheme.primary,
-                    ],
-                  ),
-                ),
-                child: const Center(
-                  child: Text(
-                    "SAVE",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            CommonGradientButton(buttonTitle: "SAVE", onTap: () {}),
           ],
         ),
       ),

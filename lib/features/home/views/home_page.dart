@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/home/views/add_new_expense_page.dart';
 import 'package:expense_tracker_app/features/home/views/main_screen.dart';
 import 'package:expense_tracker_app/features/stats/views/stats_screen.dart';
@@ -5,7 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final MyUser myUser;
+  const HomePage({required this.myUser, super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -64,7 +66,11 @@ class _HomePageState extends State<HomePage> {
                     transform: const GradientRotation(3.14 / 4),
                   )),
               child: const Icon(CupertinoIcons.add))),
-      body: activePage == 0 ? const MainScreen() : const StatsPage(),
+      body: activePage == 0
+          ? MainScreen(
+              currentUser: widget.myUser,
+            )
+          : const StatsPage(),
     );
   }
 }

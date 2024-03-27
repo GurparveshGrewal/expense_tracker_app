@@ -1,4 +1,4 @@
-import 'package:expense_tracker_app/features/home/views/home_page.dart';
+import 'package:expense_tracker_app/features/auth/views/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class MyAppView extends StatelessWidget {
@@ -6,6 +6,6 @@ class MyAppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const HomePage();
+    return const WelcomeScreen();
   }
 }
