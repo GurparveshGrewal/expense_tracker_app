@@ -9,12 +9,14 @@ import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_em
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_google.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signup_with_email_password.dart';
 import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
+import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
   _initAuth();
+  _initHome();
 
   // registering firebase wrapper
   serviceLocator.registerLazySingleton(() => FirebaseAuthWrapper());
@@ -49,4 +51,9 @@ void _initAuth() {
       signInWithGoogleUsecase: serviceLocator(),
       checkCurrentUserUsecase: serviceLocator(),
       authCubit: serviceLocator()));
+}
+
+void _initHome() {
+  // Blocs
+  serviceLocator.registerLazySingleton(() => HomeBloc());
 }

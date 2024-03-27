@@ -37,7 +37,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _signOutUsecase = signOutUsecase,
         _authCubit = authCubit,
         super(AuthInitialState()) {
-    on<AuthEvent>((event, emit) => emit(AuthLoadingState()));
+    on<AuthEvent>((event, emit) {
+      if (event is AuthSignOutEvent) {
+      } else {
+        emit(AuthLoadingState());
+      }
+    });
     on<AuthCheckIfUserLoggendIn>(authCheckIfUserLoggendIn);
     on<AuthSignUpProcessEvent>(authSignUpProcessEvent);
     on<AuthSignInProcessEvent>(authSignInProcessEvent);
@@ -100,6 +105,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> authSignOutEvent(
       AuthSignOutEvent event, Emitter<AuthState> emit) async {
     await _signOutUsecase({});
+
+    _authCubit.updateUser(null);
   }
 
   void _emitAuthSuccess(MyUser currentUser, Emitter<AuthState> emit) {
