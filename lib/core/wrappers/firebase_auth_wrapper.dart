@@ -43,4 +43,14 @@ class FirebaseAuthWrapper {
       rethrow;
     }
   }
+
+  Future<User?> signInWithGoogle() async {
+    try {
+      GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
+      final user = await _firebaseAuth.signInWithProvider(googleAuthProvider);
+      return user.user!;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
