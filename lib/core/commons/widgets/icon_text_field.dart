@@ -34,6 +34,13 @@ class IconTextFieldWidget extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "This field can't be empty";
+        } else {
+          return null;
+        }
+      },
     );
   }
 }

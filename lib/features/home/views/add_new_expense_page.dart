@@ -1,10 +1,43 @@
 import 'package:expense_tracker_app/core/commons/widgets/common_gradient_button.dart';
 import 'package:expense_tracker_app/core/commons/widgets/icon_text_field.dart';
+import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
+import 'package:expense_tracker_app/core/utils/enum_functions.dart';
+import 'package:expense_tracker_app/core/utils/enums.dart';
+import 'package:expense_tracker_app/core/utils/show_snackbar.dart';
+import 'package:expense_tracker_app/core/wrappers/firebase_auth_wrapper.dart';
+import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
+import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:uuid/uuid.dart';
 
-class AddNewExpensePage extends StatelessWidget {
+class AddNewExpensePage extends StatefulWidget {
   const AddNewExpensePage({super.key});
+
+  @override
+  State<AddNewExpensePage> createState() => _AddNewExpensePageState();
+}
+
+class _AddNewExpensePageState extends State<AddNewExpensePage> {
+  final _formKey = GlobalKey<FormState>();
+  ExpenseCategory? _selectedExpense;
+  DateTime? _selectedDate;
+
+  Future<void> _showDatePicker() async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2023),
+      lastDate: DateTime.now(),
+    );
+
+    if (selectedDate != null) {
+      setState(() {
+        _selectedDate = selectedDate;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,65 +57,181 @@ class AddNewExpensePage extends StatelessWidget {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              "Add Expense",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w800,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                              textAlign: TextAlign.center,
+      body: BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is HomeExpenseAddedSuccessState) {
+            Navigator.of(context).pop();
+            showSnackBar(context, "Expense added successfully.");
+          } else if (state is HomeFailedState) {
+            showSnackBar(context, "something went wrong :(");
+          }
+        },
+        builder: (context, state) {
+          if (state is HomeLoadingState) const Loader();
+
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Expanded(
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: Text(
+                                    "Add Expense",
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w800,
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                SizedBox(
+                                  height: 80,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  child: IconTextFieldWidget(
+                                    controller: expenseTextController,
+                                    icon: FontAwesomeIcons.dollarSign,
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                IconTextFieldWidget(
+                                  controller: noteTextController,
+                                  icon: Icons.note_alt,
+                                ),
+                                const SizedBox(height: 20),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                  height: 60,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30)),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.list,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Expanded(
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton(
+                                              hint: const Text(
+                                                  "Select Expense Category"),
+                                              alignment: Alignment.center,
+                                              value: _selectedExpense,
+                                              items: ExpenseCategory.values
+                                                  .map((value) =>
+                                                      DropdownMenuItem<
+                                                              ExpenseCategory>(
+                                                          value: value,
+                                                          child: Text(
+                                                              enumValueToString(
+                                                                  value))))
+                                                  .toList(),
+                                              onChanged: (selectedValue) {
+                                                setState(() {
+                                                  if (selectedValue ==
+                                                      _selectedExpense) {
+                                                    _selectedExpense = null;
+                                                  } else {
+                                                    _selectedExpense =
+                                                        selectedValue;
+                                                  }
+                                                });
+                                              }),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                GestureDetector(
+                                  onTap: _showDatePicker,
+                                  child: Container(
+                                    height: 70,
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_month,
+                                          size: 17,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text(
+                                          _selectedDate != null
+                                              ? "${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}"
+                                              : "Select Expense Date",
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 30),
-                          SizedBox(
-                            height: 80,
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: IconTextFieldWidget(
-                              controller: expenseTextController,
-                              icon: FontAwesomeIcons.dollarSign,
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-                          IconTextFieldWidget(
-                            controller: expenseTextController,
-                            icon: FontAwesomeIcons.list,
-                          ),
-                          const SizedBox(height: 20),
-                          IconTextFieldWidget(
-                            controller: noteTextController,
-                            icon: Icons.note_alt,
-                          ),
-                          const SizedBox(height: 20),
-                          // TODO : remove unwanted text fields.
-                          IconTextFieldWidget(
-                            controller: expenseTextController,
-                            icon: FontAwesomeIcons.calendarDay,
-                          )
-                        ],
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                CommonGradientButton(
+                    buttonTitle: "SAVE",
+                    onTap: () {
+                      if (_formKey.currentState!.validate() &&
+                          _selectedDate != null &&
+                          _selectedExpense != null) {
+                        context
+                            .read<HomeBloc>()
+                            .add(HomeAddExpenseToDatabaseProcessEvent(
+                                expense: ExpenseEntity(
+                              expenseId: const Uuid().v4(),
+                              userId: FirebaseAuthWrapper().currentUser!.uid,
+                              title: expenseTextController.text.trim(),
+                              note: noteTextController.text.trim(),
+                              expenseCategory: _selectedExpense!,
+                              expenseAmount: double.parse(
+                                  expenseTextController.text.trim()),
+                              expenseDate: _selectedDate!,
+                            )));
+                      }
+                    }),
+              ],
             ),
-            CommonGradientButton(buttonTitle: "SAVE", onTap: () {}),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

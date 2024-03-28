@@ -41,14 +41,20 @@ class FirestoreDatabaseWrapper {
     }
   }
 
-  Future<void> fetchExpenseFromDatabase({required String userId}) async {
+  Future<List<Map<String, dynamic>>> fetchExpenseFromDatabase(
+      {required String userId}) async {
     try {
       final collection = await _firebaseFirestore
           .collection(_expensesCollectionName)
           .where("uid", isEqualTo: userId)
           .get();
 
+      // Map each QueryDocumentSnapshot to a Map<String, dynamic>
+      final List<Map<String, dynamic>> expenseList =
+          collection.docs.map((doc) => doc.data()).toList();
+
       print(collection);
+      return expenseList;
     } catch (e) {
       rethrow;
     }
