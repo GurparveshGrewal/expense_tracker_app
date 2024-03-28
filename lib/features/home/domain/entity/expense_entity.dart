@@ -1,4 +1,4 @@
-import 'package:expense_tracker_app/core/utils/enum_functions.dart';
+import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/core/utils/enums.dart';
 
 class ExpenseEntity {
@@ -20,6 +20,18 @@ class ExpenseEntity {
     required this.expenseDate,
   });
 
+  static ExpenseEntity empty() {
+    return ExpenseEntity(
+      expenseId: '',
+      userId: '',
+      title: '',
+      note: '',
+      expenseCategory: ExpenseCategory.misc,
+      expenseAmount: 0,
+      expenseDate: DateTime.now(),
+    );
+  }
+
   Map<String, dynamic> toJSON() => {
         "expenseId": expenseId,
         "userId": userId,
@@ -36,7 +48,8 @@ class ExpenseEntity {
         userId: rawData['userId'],
         title: rawData['title'],
         note: rawData['note'],
-        expenseCategory: rawData['expenseCategory'],
+        expenseCategory: convertStringToEnum(
+            ExpenseCategory.values, rawData['expenseCategory']),
         expenseAmount: rawData['expenseAmount'],
         expenseDate: DateTime.parse(rawData['expenseDate']));
   }

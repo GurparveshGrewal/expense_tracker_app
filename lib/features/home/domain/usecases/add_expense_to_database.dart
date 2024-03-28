@@ -9,7 +9,9 @@ class AddExpenseToDatabaseUsecase
 
   @override
   Future<void> call(AddExpenseToDatabaseParams params) async {
-    await _repository.addExpenseToDatabase(expense: params.expense);
+    await _repository.addExpenseToDatabase(
+      expense: params.expense,
+    );
   }
 }
 

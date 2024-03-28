@@ -1,7 +1,7 @@
 import 'package:expense_tracker_app/core/commons/widgets/common_gradient_button.dart';
 import 'package:expense_tracker_app/core/commons/widgets/icon_text_field.dart';
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
-import 'package:expense_tracker_app/core/utils/enum_functions.dart';
+import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/core/utils/enums.dart';
 import 'package:expense_tracker_app/core/utils/show_snackbar.dart';
 import 'package:expense_tracker_app/core/wrappers/firebase_auth_wrapper.dart';

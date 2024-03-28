@@ -8,17 +8,20 @@ class HomeRepositoryImpl extends HomeRepository {
   HomeRepositoryImpl(this._firestoreDatabaseWrapper);
 
   @override
-  Future<void> addExpenseToDatabase({required ExpenseEntity expense}) async {
+  Future<void> addExpenseToDatabase({
+    required ExpenseEntity expense,
+  }) async {
     try {
       await _firestoreDatabaseWrapper.addExpenseToDatabase(
-          data: expense.toJSON(), id: expense.userId);
+          data: expense.toJSON(), id: expense.expenseId);
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<List<ExpenseEntity>> fetchExpenses({required String uid}) async {
+  Future<List<ExpenseEntity>> fetchExpensesFromDatabase(
+      {required String uid}) async {
     try {
       final List<ExpenseEntity> expenses = [];
       final rawExpenses =

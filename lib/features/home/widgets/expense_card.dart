@@ -1,10 +1,16 @@
+import 'package:expense_tracker_app/core/utils/functions.dart';
+import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseCard extends StatelessWidget {
+  final ExpenseEntity expense;
   final Color backgroundColor;
   final IconData icon;
   const ExpenseCard(
-      {required this.backgroundColor, required this.icon, super.key});
+      {required this.expense,
+      required this.backgroundColor,
+      required this.icon,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +42,22 @@ class ExpenseCard extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                const Text(
-                  "Food",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Text(
+                  expense.title,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 const Spacer(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "-\$45.00",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    Text(
+                      '\$${expense.expenseAmount.toString()}',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      "Today",
+                      convertDateToReadable(expense.expenseDate),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.outline,
                       ),

@@ -12,6 +12,7 @@ import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:expense_tracker_app/features/home/data/repository/home_repository_impl.dart';
 import 'package:expense_tracker_app/features/home/domain/repository/home_repository.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/add_expense_to_database.dart';
+import 'package:expense_tracker_app/features/home/domain/usecases/fetch_expenses_from_database.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -64,9 +65,12 @@ void _initHome() {
   // Usecases
   serviceLocator
       .registerFactory(() => AddExpenseToDatabaseUsecase(serviceLocator()));
+  serviceLocator.registerFactory(
+      () => FetchExpensesFromDatabaseUsecase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => HomeBloc(
         addExpenseToDatabaseUsecase: serviceLocator(),
+        fetchExpensesFromDatabaseUsecase: serviceLocator(),
       ));
 }

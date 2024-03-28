@@ -5,5 +5,5 @@ abstract class HomeRepository {
     required ExpenseEntity expense,
   });
 
-  Future<List<ExpenseEntity>> fetchExpenses({required String uid});
+  Future<List<ExpenseEntity>> fetchExpensesFromDatabase({required String uid});
 }

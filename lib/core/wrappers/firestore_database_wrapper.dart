@@ -46,7 +46,7 @@ class FirestoreDatabaseWrapper {
     try {
       final collection = await _firebaseFirestore
           .collection(_expensesCollectionName)
-          .where("uid", isEqualTo: userId)
+          .where("userId", isEqualTo: userId)
           .get();
 
       // Map each QueryDocumentSnapshot to a Map<String, dynamic>
