@@ -6,6 +6,7 @@ import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -63,6 +64,17 @@ class _SignInPageState extends State<SignInPage> {
                             email: emailTextController.text.trim(),
                             password: passwordTextController.text.trim()));
                       }),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SignInButton(
+                    Buttons.google,
+                    onPressed: () {
+                      context
+                          .read<AuthBloc>()
+                          .add(AuthProcessSignInWithGoogle());
+                    },
+                  )
                 ],
               ),
             );

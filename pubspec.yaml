@@ -20,6 +20,7 @@ dependencies:
   get_it: ^7.6.7
   bloc: ^8.1.4
   flutter_bloc: ^8.1.5
+  sign_in_button: ^3.2.0
 
 dev_dependencies:
   flutter_test:

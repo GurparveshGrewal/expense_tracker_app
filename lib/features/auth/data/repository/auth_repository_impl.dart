@@ -77,6 +77,27 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
+  Future<MyUser> signInWithGoogle() async {
+    try {
+      final user = await _firebaseAuthWrapper.signInWithGoogle();
+      if (user != null) {
+        await _firestoreDatabaseWrapper.addUserToDatabase(uid: user.uid, data: {
+          "fullName": user.displayName ?? "empty",
+          "email": user.email!,
+          "createdAt": DateTime.now().toIso8601String(),
+        });
+        return MyUser(
+            uid: user.uid,
+            fullName: user.displayName ?? "User",
+            email: user.email!);
+      }
+      return MyUser.empty;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<void> signOut() async {
     try {
       await _firebaseAuthWrapper.signOut();

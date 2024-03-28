@@ -27,4 +27,6 @@ class AuthSignInProcessEvent extends AuthEvent {
   });
 }
 
+class AuthProcessSignInWithGoogle extends AuthEvent {}
+
 class AuthSignOutEvent extends AuthEvent {}

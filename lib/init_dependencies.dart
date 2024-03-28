@@ -6,14 +6,17 @@ import 'package:expense_tracker_app/features/auth/domain/repository/auth_reposit
 import 'package:expense_tracker_app/features/auth/domain/usecases/check_current_user_usecase.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/sign_out.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_email_password%20.dart';
+import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_google.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signup_with_email_password.dart';
 import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
+import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
   _initAuth();
+  _initHome();
 
   // registering firebase wrapper
   serviceLocator.registerLazySingleton(() => FirebaseAuthWrapper());
@@ -34,6 +37,8 @@ void _initAuth() {
       () => SignUpWithEmailAndPasswordUsecase(serviceLocator()));
   serviceLocator.registerFactory(
       () => SignInWithEmailAndPasswordUsecase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => SignInWithGoogleUsecase(serviceLocator()));
   serviceLocator.registerFactory(() => SignOutUsecase(serviceLocator()));
   serviceLocator
       .registerFactory(() => CheckCurrentUserUsecase(serviceLocator()));
@@ -43,6 +48,12 @@ void _initAuth() {
       signInWithEmailAndPasswordUsecase: serviceLocator(),
       signUpWithEmailAndPasswordUsecase: serviceLocator(),
       signOutUsecase: serviceLocator(),
+      signInWithGoogleUsecase: serviceLocator(),
       checkCurrentUserUsecase: serviceLocator(),
       authCubit: serviceLocator()));
+}
+
+void _initHome() {
+  // Blocs
+  serviceLocator.registerLazySingleton(() => HomeBloc());
 }
