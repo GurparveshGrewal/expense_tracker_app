@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreDatabaseWrapper {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   static const String _userCollectionName = "users";
+  static const String _expensesCollectionName = "expenses";
 
   Future<void> addUserToDatabase({
     required String uid,
@@ -24,6 +25,30 @@ class FirestoreDatabaseWrapper {
           .doc(uid)
           .get();
       return response.data()!;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> addExpenseToDatabase(
+      {required Map<String, dynamic> data, required String id}) async {
+    try {
+      final document =
+          _firebaseFirestore.collection(_expensesCollectionName).doc(id);
+      await document.set(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> fetchExpenseFromDatabase({required String userId}) async {
+    try {
+      final collection = await _firebaseFirestore
+          .collection(_expensesCollectionName)
+          .where("uid", isEqualTo: userId)
+          .get();
+
+      print(collection);
     } catch (e) {
       rethrow;
     }
