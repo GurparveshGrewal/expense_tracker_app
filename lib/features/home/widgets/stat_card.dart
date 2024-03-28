@@ -2,7 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class StatsCard extends StatelessWidget {
-  const StatsCard({super.key});
+  final double expensesAmount;
+  final double income;
+
+  const StatsCard(
+      {required this.expensesAmount, required this.income, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +32,14 @@ class StatsCard extends StatelessWidget {
           const Text(
             "Total Balance",
             style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
           ),
           const SizedBox(
             height: 10,
           ),
-          const Text(
-            "\$ 4800.00",
-            style: TextStyle(
+          Text(
+            income > 0 ? '\$${(income - expensesAmount).toString()}' : "\$0.0",
+            style: const TextStyle(
                 color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
           ),
           const SizedBox(
@@ -61,17 +65,19 @@ class StatsCard extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Income",
                         style: TextStyle(
-                            color: Colors.white60, fontWeight: FontWeight.w600),
+                            color: Colors.white60,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
                       ),
                       Text(
-                        "\$ 2500.00",
-                        style: TextStyle(
+                        '\$${income.toString()}',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -98,17 +104,20 @@ class StatsCard extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Expenses",
                         style: TextStyle(
-                            color: Colors.white60, fontWeight: FontWeight.w600),
+                          color: Colors.white60,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                       Text(
-                        "\$ 800.00",
-                        style: TextStyle(
+                        '\$${expensesAmount.toString()}',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 16,

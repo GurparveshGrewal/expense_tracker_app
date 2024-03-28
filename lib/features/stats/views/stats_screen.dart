@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
 import 'package:expense_tracker_app/features/stats/widgets/chart_widget.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,7 @@ class StatsPage extends StatelessWidget {
                   itemCount: 3,
                   itemBuilder: (context, index) {
                     return ExpenseCard(
+                      expense: ExpenseEntity.empty(),
                       icon: Icons.food_bank_outlined,
                       backgroundColor: index % 2 == 0
                           ? Theme.of(context).colorScheme.secondary
