@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/core/commons/widgets/double_action_alert_dialog.dart';
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
 import 'package:expense_tracker_app/core/utils/enums.dart';
 import 'package:expense_tracker_app/core/utils/show_snackbar.dart';
@@ -92,7 +93,22 @@ class _MainScreenState extends State<MainScreen> {
                       const Spacer(),
                       IconButton(
                           onPressed: () {
-                            context.read<AuthBloc>().add(AuthSignOutEvent());
+                            doubleActionAlertDialog(
+                              context,
+                              title: 'Signing Out!',
+                              content: "Are you sure you want to sign out?",
+                              negativeButtonTitle: 'Cancel',
+                              positiveButtonTitle: 'Sign Out',
+                              negativeCallBack: () {
+                                Navigator.of(context).pop();
+                              },
+                              positiveCallBack: () {
+                                Navigator.of(context).pop();
+                                context
+                                    .read<AuthBloc>()
+                                    .add(AuthSignOutEvent());
+                              },
+                            );
                           },
                           icon: const Icon(
                             Icons.logout_sharp,
