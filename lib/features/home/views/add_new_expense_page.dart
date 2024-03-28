@@ -24,6 +24,10 @@ class _AddNewExpensePageState extends State<AddNewExpensePage> {
   ExpenseCategory? _selectedExpense;
   DateTime? _selectedDate;
 
+  // TextEditiongControllers
+  final TextEditingController expenseTextController = TextEditingController();
+  final TextEditingController noteTextController = TextEditingController();
+
   Future<void> _showDatePicker() async {
     final selectedDate = await showDatePicker(
       context: context,
@@ -41,9 +45,6 @@ class _AddNewExpensePageState extends State<AddNewExpensePage> {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController expenseTextController = TextEditingController();
-    final TextEditingController noteTextController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -67,7 +68,7 @@ class _AddNewExpensePageState extends State<AddNewExpensePage> {
           }
         },
         builder: (context, state) {
-          if (state is HomeLoadingState) const Loader();
+          if (state is HomeLoadingState) return const Loader();
 
           return Padding(
             padding: const EdgeInsets.all(20),
@@ -129,14 +130,13 @@ class _AddNewExpensePageState extends State<AddNewExpensePage> {
                                             .outline,
                                       ),
                                       const SizedBox(
-                                        width: 20,
+                                        width: 10,
                                       ),
                                       Expanded(
                                         child: DropdownButtonHideUnderline(
                                           child: DropdownButton(
                                               hint: const Text(
                                                   "Select Expense Category"),
-                                              alignment: Alignment.center,
                                               value: _selectedExpense,
                                               items: ExpenseCategory.values
                                                   .map((value) =>
