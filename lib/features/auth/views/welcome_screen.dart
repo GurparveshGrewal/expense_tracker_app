@@ -118,13 +118,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         labelColor: Colors.white,
                         tabs: const [
                           Padding(
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(10),
                             child: Text(
                               'Sign In',
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(10),
                             child: Text(
                               'Sign Up',
                             ),
