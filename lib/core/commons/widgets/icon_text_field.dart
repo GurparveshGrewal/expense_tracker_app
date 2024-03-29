@@ -6,12 +6,14 @@ class IconTextFieldWidget extends StatelessWidget {
   final IconData icon;
   final TextInputType inputType;
   final bool passwordField;
+  final bool allowAmountValueOnly;
   const IconTextFieldWidget(
       {required this.controller,
       required this.icon,
       this.hintText = '',
       this.inputType = TextInputType.text,
       this.passwordField = false,
+      this.allowAmountValueOnly = false,
       super.key});
 
   @override
@@ -38,6 +40,14 @@ class IconTextFieldWidget extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return "This field can't be empty";
         } else {
+          if (allowAmountValueOnly) {
+            try {
+              double.parse(value);
+              return null;
+            } catch (e) {
+              return 'Please enter a valid number';
+            }
+          }
           return null;
         }
       },

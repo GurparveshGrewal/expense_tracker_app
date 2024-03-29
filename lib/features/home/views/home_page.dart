@@ -1,9 +1,12 @@
+import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/home/views/add_new_expense_page.dart';
+import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:expense_tracker_app/features/home/views/main_screen.dart';
 import 'package:expense_tracker_app/features/stats/views/stats_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   final MyUser myUser;
@@ -23,54 +26,85 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    context
+        .read<HomeBloc>()
+        .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-        child: BottomNavigationBar(
-            onTap: (pageNumber) {
-              changePage(pageNumber);
+        bottomNavigationBar: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          child: BottomNavigationBar(
+              onTap: (pageNumber) {
+                changePage(pageNumber);
+              },
+              currentIndex: activePage,
+              elevation: 5,
+              backgroundColor: Colors.white,
+              showUnselectedLabels: false,
+              showSelectedLabels: false,
+              items: const [
+                BottomNavigationBarItem(
+                    label: '', icon: Icon(CupertinoIcons.home)),
+                BottomNavigationBarItem(
+                  label: '',
+                  icon: Icon(CupertinoIcons.graph_square_fill),
+                ),
+              ]),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+            shape: const CircleBorder(),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => const AddNewExpensePage()));
             },
-            currentIndex: activePage,
-            elevation: 5,
-            backgroundColor: Colors.white,
-            showUnselectedLabels: false,
-            showSelectedLabels: false,
-            items: const [
-              BottomNavigationBarItem(
-                  label: '', icon: Icon(CupertinoIcons.home)),
-              BottomNavigationBarItem(
-                label: '',
-                icon: Icon(CupertinoIcons.graph_square_fill),
-              ),
-            ]),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-          shape: const CircleBorder(),
-          onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (ctx) => const AddNewExpensePage()));
+            child: Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.tertiary,
+                        Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).colorScheme.primary,
+                      ],
+                      transform: const GradientRotation(3.14 / 4),
+                    )),
+                child: const Icon(CupertinoIcons.add))),
+        body: BlocConsumer<HomeBloc, HomeState>(
+          listener: (context, state) {
+            if (state is HomeExpenseAddedSuccessState) {
+              context
+                  .read<HomeBloc>()
+                  .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+            } else if (state is HomeIncomeAddedSuccessState) {
+              context
+                  .read<HomeBloc>()
+                  .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+            }
           },
-          child: Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.tertiary,
-                      Theme.of(context).colorScheme.secondary,
-                      Theme.of(context).colorScheme.primary,
-                    ],
-                    transform: const GradientRotation(3.14 / 4),
-                  )),
-              child: const Icon(CupertinoIcons.add))),
-      body: activePage == 0
-          ? MainScreen(
-              currentUser: widget.myUser,
-            )
-          : const StatsPage(),
-    );
+          builder: (context, state) {
+            if (state is HomeLoadingState) return const Loader();
+
+            if (state is HomeInitializedState) {
+              if (activePage == 0) {
+                return MainScreen(
+                  initializedState: state,
+                  currentUser: widget.myUser,
+                );
+              } else {
+                return const StatsPage();
+              }
+            }
+
+            return const Center(child: Text("Something went wrong"));
+          },
+        ));
   }
 }

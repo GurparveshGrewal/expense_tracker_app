@@ -1,15 +1,25 @@
+import 'package:expense_tracker_app/features/home/domain/entity/income_entity.dart';
+import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
+import 'package:expense_tracker_app/features/home/widgets/add_income_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 class StatsCard extends StatelessWidget {
   final double expensesAmount;
   final double income;
+  final String uid;
 
   const StatsCard(
-      {required this.expensesAmount, required this.income, super.key});
+      {required this.uid,
+      required this.expensesAmount,
+      required this.income,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController incomeTextController = TextEditingController();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       decoration: BoxDecoration(
@@ -50,27 +60,59 @@ class StatsCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(50)),
-                    child: const Icon(
-                      CupertinoIcons.arrow_down,
-                      size: 20,
-                      color: Colors.greenAccent,
-                    ),
-                  ),
+                  income > 0
+                      ? Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: const Icon(
+                            CupertinoIcons.arrow_down,
+                            size: 20,
+                            color: Colors.greenAccent,
+                          ),
+                        )
+                      : Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          child: IconButton(
+                            onPressed: () {
+                              addIncomeDialog(context,
+                                  controller: incomeTextController,
+                                  negativeButtonTitle: 'Cancel',
+                                  positiveButtonTitle: 'Add Income',
+                                  negativeCallBack: Navigator.of(context).pop,
+                                  positiveCallBack: () {
+                                Navigator.of(context).pop();
+                                context
+                                    .read<HomeBloc>()
+                                    .add(HomeAddIncomeToDatabaseEvent(
+                                        income: IncomeEntity(
+                                      userId: uid,
+                                      incomeId: const Uuid().v4(),
+                                      amount: double.parse(
+                                          incomeTextController.text.trim()),
+                                      date: DateTime.now(),
+                                    )));
+                              });
+                            },
+                            icon: const Icon(
+                              size: 30,
+                              Icons.add,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
                   const SizedBox(
                     width: 10,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Income",
-                        style: TextStyle(
+                      Text(
+                        income > 0 ? "Income" : "Add Income",
+                        style: const TextStyle(
                             color: Colors.white60,
                             fontWeight: FontWeight.bold,
                             fontSize: 18),

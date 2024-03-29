@@ -103,6 +103,7 @@ class _AddNewExpensePageState extends State<AddNewExpensePage> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.8,
                                   child: IconTextFieldWidget(
+                                    allowAmountValueOnly: true,
                                     controller: expenseTextController,
                                     icon: FontAwesomeIcons.dollarSign,
                                   ),

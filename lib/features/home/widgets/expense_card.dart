@@ -42,10 +42,15 @@ class ExpenseCard extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                Text(
-                  expense.title,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w500),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 2,
+                  child: Text(
+                    expense.note,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 const Spacer(),
                 Column(

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class CommonGradientButton extends StatelessWidget {
@@ -24,6 +26,7 @@ class CommonGradientButton extends StatelessWidget {
               Theme.of(context).colorScheme.secondary,
               Theme.of(context).colorScheme.primary,
             ],
+            transform: const GradientRotation(pi / 3.4),
           ),
         ),
         child: Center(
