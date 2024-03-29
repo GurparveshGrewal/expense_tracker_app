@@ -11,10 +11,10 @@ class HomeAddExpenseToDatabaseProcessEvent extends HomeEvent {
   });
 }
 
-class HomeFetchExpensesFromDatabaseProcessEvent extends HomeEvent {
+class HomeInitialFetchEvent extends HomeEvent {
   final String userId;
 
-  HomeFetchExpensesFromDatabaseProcessEvent({
+  HomeInitialFetchEvent({
     required this.userId,
   });
 }

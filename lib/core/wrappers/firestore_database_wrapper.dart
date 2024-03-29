@@ -4,6 +4,7 @@ class FirestoreDatabaseWrapper {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   static const String _userCollectionName = "users";
   static const String _expensesCollectionName = "expenses";
+  static const String _incomeCollectionName = "income";
 
   Future<void> addUserToDatabase({
     required String uid,
@@ -53,8 +54,38 @@ class FirestoreDatabaseWrapper {
       final List<Map<String, dynamic>> expenseList =
           collection.docs.map((doc) => doc.data()).toList();
 
-      print(collection);
       return expenseList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> addIncomeForUser({
+    required String incomeId,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      final document =
+          _firebaseFirestore.collection(_incomeCollectionName).doc(incomeId);
+      await document.set(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchIncomeFromDatabase(
+      {required String userId}) async {
+    try {
+      final collection = await _firebaseFirestore
+          .collection(_incomeCollectionName)
+          .where("userId", isEqualTo: userId)
+          .get();
+
+      // Map each QueryDocumentSnapshot to a Map<String, dynamic>
+      final List<Map<String, dynamic>> incomeList =
+          collection.docs.map((doc) => doc.data()).toList();
+
+      return incomeList;
     } catch (e) {
       rethrow;
     }
