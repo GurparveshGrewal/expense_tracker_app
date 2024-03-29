@@ -60,7 +60,7 @@ class FirestoreDatabaseWrapper {
     }
   }
 
-  Future<void> addIncomeForUser({
+  Future<void> addIncomeToDatabase({
     required String incomeId,
     required Map<String, dynamic> data,
   }) async {

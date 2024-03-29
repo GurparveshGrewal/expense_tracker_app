@@ -83,6 +83,10 @@ class _HomePageState extends State<HomePage> {
               context
                   .read<HomeBloc>()
                   .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+            } else if (state is HomeIncomeAddedSuccessState) {
+              context
+                  .read<HomeBloc>()
+                  .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
             }
           },
           builder: (context, state) {

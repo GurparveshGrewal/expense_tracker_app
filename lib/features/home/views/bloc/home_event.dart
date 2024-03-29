@@ -18,3 +18,9 @@ class HomeInitialFetchEvent extends HomeEvent {
     required this.userId,
   });
 }
+
+class HomeAddIncomeToDatabaseEvent extends HomeEvent {
+  final IncomeEntity income;
+
+  HomeAddIncomeToDatabaseEvent({required this.income});
+}

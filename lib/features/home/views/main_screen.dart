@@ -5,6 +5,7 @@ import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/income_entity.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
+import 'package:expense_tracker_app/features/home/widgets/add_income_widget.dart';
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
 import 'package:expense_tracker_app/features/home/widgets/stat_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,6 +35,16 @@ class _MainScreenState extends State<MainScreen> {
             positiveButtonTitle: 'Add Income',
             negativeCallBack: Navigator.of(context).pop, positiveCallBack: () {
           Navigator.of(context).pop();
+          addIncomeDialog(
+            context,
+            controller: TextEditingController(),
+            negativeButtonTitle: "Cancel",
+            positiveButtonTitle: "Add Income",
+            negativeCallBack: Navigator.of(context).pop,
+            positiveCallBack: () {
+              Navigator.of(context).pop();
+            },
+          );
         });
       });
     }
@@ -108,6 +119,7 @@ class _MainScreenState extends State<MainScreen> {
               height: 20,
             ),
             StatsCard(
+              uid: widget.currentUser.uid,
               income: _getTotalIncome(widget.initializedState.incomes),
               expensesAmount:
                   _getTotalExpenses(widget.initializedState.expenses),

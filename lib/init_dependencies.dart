@@ -79,5 +79,6 @@ void _initHome() {
         addExpenseToDatabaseUsecase: serviceLocator(),
         fetchExpensesFromDatabaseUsecase: serviceLocator(),
         fetchIncomes: serviceLocator(),
+        addIncomeToDatabaseUsecase: serviceLocator(),
       ));
 }

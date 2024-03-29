@@ -43,8 +43,8 @@ class HomeRepositoryImpl extends HomeRepository {
   @override
   Future<void> addIncomeToDatabase({required IncomeEntity income}) async {
     try {
-      await _firestoreDatabaseWrapper.addExpenseToDatabase(
-          data: income.toJSON(), id: income.incomeId);
+      await _firestoreDatabaseWrapper.addIncomeToDatabase(
+          data: income.toJSON(), incomeId: income.incomeId);
     } catch (e) {
       rethrow;
     }
@@ -64,7 +64,7 @@ class HomeRepositoryImpl extends HomeRepository {
             IncomeEntity(
               userId: income['userId'],
               incomeId: income['incomeId'],
-              amount: income['amount'],
+              amount: double.parse(income['amount']),
               date: DateTime.parse(income['date']),
             ),
           );

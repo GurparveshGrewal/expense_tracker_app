@@ -34,4 +34,10 @@ class HomeInitializedState extends HomeState {
 
 class HomeExpenseAddedSuccessState extends HomeState {}
 
+class HomeIncomeAddedSuccessState extends HomeState {
+  final IncomeEntity income;
+
+  HomeIncomeAddedSuccessState({required this.income});
+}
+
 class HomeFailedState extends HomeState {}
