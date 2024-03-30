@@ -22,9 +22,6 @@ class _ExpenseCardState extends State<ExpenseCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // showDialog(
-        //     context: context,
-        //     builder: (context) => const ExpenseDetailsWidget());
         setState(() {
           _isExpanded = !_isExpanded;
         });
@@ -125,22 +122,27 @@ class _ExpenseCardState extends State<ExpenseCard> {
                               ],
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '\$${widget.expense.expenseAmount.toString()}',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                convertDateToReadable(
-                                    widget.expense.expenseDate),
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '\$${widget.expense.expenseAmount.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  convertDateToReadable(
+                                      widget.expense.expenseDate),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
