@@ -44,7 +44,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           FetchIncomesFromDatabaseParams(userId: event.userId));
 
       emit(HomeInitializedState(
-        showAddIncomeDialog: incomes.isEmpty,
+        // TODO: remove constant dialog
+        showAddIncomeDialog: false,
         expenses: expenses,
         incomes: incomes,
       ));

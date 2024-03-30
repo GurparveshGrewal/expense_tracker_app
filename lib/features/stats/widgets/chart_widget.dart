@@ -62,7 +62,7 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
   }
 
   List<BarChartGroupData> showingGroups(double animationValue) =>
-      List.generate(8, (i) {
+      List.generate(7, (i) {
         switch (i) {
           case 0:
             return makeGroupData(0, 2, animationValue);

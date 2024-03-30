@@ -66,7 +66,7 @@ class AuthRepositoryImpl extends AuthRepository {
       if (currentUser != null) {
         return MyUser(
             uid: currentUser.uid,
-            fullName: "fullName",
+            fullName: currentUser.displayName ?? "fullName",
             email: currentUser.email!);
       }
 
