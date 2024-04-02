@@ -3,7 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class MyChart extends StatefulWidget {
-  const MyChart({super.key});
+  final List<double> expenses;
+  const MyChart({required this.expenses, super.key});
 
   @override
   State<MyChart> createState() => _MyChartState();

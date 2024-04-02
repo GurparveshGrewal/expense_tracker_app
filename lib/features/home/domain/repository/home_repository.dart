@@ -13,4 +13,9 @@ abstract class HomeRepository {
   });
 
   Future<List<IncomeEntity>> fetchIncomesFromDatabase({required String uid});
+
+  List<ExpenseEntity> fetchFilteredExpenses({
+    required DateTime fromDate,
+    required DateTime toDate,
+  });
 }

@@ -99,7 +99,10 @@ class _HomePageState extends State<HomePage> {
                   currentUser: widget.myUser,
                 );
               } else {
-                return const StatsPage();
+                return StatsPage(
+                  fromDate: DateTime.now().subtract(const Duration(days: 7)),
+                  toDate: DateTime.now(),
+                );
               }
             }
 
