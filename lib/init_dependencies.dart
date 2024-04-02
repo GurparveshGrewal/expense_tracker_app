@@ -1,4 +1,5 @@
 import 'package:expense_tracker_app/core/commons/cubit/app_user_cubit.dart';
+import 'package:expense_tracker_app/core/repository/shared_preferences_reposity.dart';
 import 'package:expense_tracker_app/core/wrappers/firebase_auth_wrapper.dart';
 import 'package:expense_tracker_app/core/wrappers/firestore_database_wrapper.dart';
 import 'package:expense_tracker_app/features/auth/data/repository/auth_repository_impl.dart';
@@ -16,6 +17,8 @@ import 'package:expense_tracker_app/features/home/domain/usecases/add_income_to_
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_expenses_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_filtered_expenses.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_incomes_from_database.dart';
+import 'package:expense_tracker_app/features/home/domain/usecases/get_saved_currency.dart';
+import 'package:expense_tracker_app/features/home/domain/usecases/save_selected_currency.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:expense_tracker_app/features/stats/bloc/stats_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -32,6 +35,8 @@ Future<void> initDependencies() async {
 
   // core
   serviceLocator.registerLazySingleton(() => AppUserCubit());
+  serviceLocator.registerLazySingleton<SharedPreferencesRepository>(
+      () => SharedPreferencesRepositoryImpl());
 }
 
 void _initAuth() {
@@ -64,6 +69,7 @@ void _initAuth() {
 void _initHome() {
   serviceLocator.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(
         serviceLocator(),
+        serviceLocator(),
       ));
 
   // Usecases
@@ -77,9 +83,15 @@ void _initHome() {
       .registerFactory(() => FetchIncomesFromDatabaseUsecase(serviceLocator()));
   serviceLocator
       .registerFactory(() => FetchFilteredExpensesUsecase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => GetSavedCurrencyUsecase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => SaveSelectedCurrencyUsecase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => HomeBloc(
+        getSavedCurrencyUsecase: serviceLocator(),
+        saveSelectedCurrencyUsecase: serviceLocator(),
         addExpenseToDatabaseUsecase: serviceLocator(),
         fetchExpensesFromDatabaseUsecase: serviceLocator(),
         fetchIncomes: serviceLocator(),

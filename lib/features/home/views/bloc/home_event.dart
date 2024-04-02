@@ -3,6 +3,16 @@ part of 'home_bloc.dart';
 @immutable
 sealed class HomeEvent {}
 
+class HomeCheckSelectedCurrencyEvent extends HomeEvent {}
+
+class HomeSaveSelectedCurrencyEvent extends HomeEvent {
+  final Currency selectedCurrency;
+
+  HomeSaveSelectedCurrencyEvent({
+    required this.selectedCurrency,
+  });
+}
+
 class HomeAddExpenseToDatabaseProcessEvent extends HomeEvent {
   final ExpenseEntity expense;
 

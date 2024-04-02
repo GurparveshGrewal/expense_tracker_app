@@ -1,3 +1,6 @@
+import 'package:expense_tracker_app/core/repository/shared_preferences_reposity.dart';
+import 'package:expense_tracker_app/core/utils/enums.dart';
+import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/core/wrappers/firestore_database_wrapper.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/income_entity.dart';
@@ -5,11 +8,30 @@ import 'package:expense_tracker_app/features/home/domain/repository/home_reposit
 
 class HomeRepositoryImpl extends HomeRepository {
   final FirestoreDatabaseWrapper _firestoreDatabaseWrapper;
+  final SharedPreferencesRepository _sharedPreferencesRepository;
 
-  HomeRepositoryImpl(this._firestoreDatabaseWrapper);
+  HomeRepositoryImpl(
+    this._firestoreDatabaseWrapper,
+    this._sharedPreferencesRepository,
+  );
+
+  // keys
+  static const String _keyNameCurrencyPrefs = 'currency';
 
   List<ExpenseEntity> _cachedExpenses = [];
   List<IncomeEntity> _cachedIncomes = [];
+
+  @override
+  Future<String?> checkSelectedCurrency() async {
+    return await _sharedPreferencesRepository
+        .getCurrency(_keyNameCurrencyPrefs);
+  }
+
+  @override
+  Future<void> saveSelectedCurrency(Currency selectedCurrency) async {
+    await _sharedPreferencesRepository.saveCurrency(
+        _keyNameCurrencyPrefs, enumValueToString(selectedCurrency));
+  }
 
   @override
   Future<void> addExpenseToDatabase({

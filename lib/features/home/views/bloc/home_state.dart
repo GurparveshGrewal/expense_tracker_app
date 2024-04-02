@@ -5,6 +5,16 @@ sealed class HomeState {}
 
 final class HomeInitial extends HomeState {}
 
+final class HomeSuccessfullyFetchedCurrencyState extends HomeState {
+  final Currency selectedCurrency;
+
+  HomeSuccessfullyFetchedCurrencyState({
+    required this.selectedCurrency,
+  });
+}
+
+class HomeFirstSignInState extends HomeState {}
+
 class HomeLoadingState extends HomeState {}
 
 class HomeInitializedState extends HomeState {

@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/core/commons/widgets/double_action_alert_dialog.dart';
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/home/views/add_new_expense_page.dart';
@@ -18,6 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int activePage = 0;
+  bool _showSelectCurrencyDialog = false;
 
   void changePage(int pageNumber) {
     setState(() {
@@ -28,13 +30,25 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<HomeBloc>()
-        .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+    context.read<HomeBloc>().add(HomeCheckSelectedCurrencyEvent());
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_showSelectCurrencyDialog) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        doubleActionAlertDialog(
+          context,
+          title: 'Welcome to EXPENDS',
+          content: 'To proceed ahead, please select your currency.',
+          negativeButtonTitle: '',
+          positiveButtonTitle: 'Select Currency',
+          negativeCallBack: () {},
+          positiveCallBack: () {},
+        );
+      });
+    }
+
     return Scaffold(
         bottomNavigationBar: ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
@@ -79,7 +93,18 @@ class _HomePageState extends State<HomePage> {
                 child: const Icon(CupertinoIcons.add))),
         body: BlocConsumer<HomeBloc, HomeState>(
           listener: (context, state) {
-            if (state is HomeExpenseAddedSuccessState) {
+            if (state is HomeSuccessfullyFetchedCurrencyState) {
+              setState(() {
+                _showSelectCurrencyDialog = false;
+              });
+              context
+                  .read<HomeBloc>()
+                  .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+            } else if (state is HomeFirstSignInState) {
+              setState(() {
+                _showSelectCurrencyDialog = true;
+              });
+            } else if (state is HomeExpenseAddedSuccessState) {
               context.read<HomeBloc>().add(HomeInitialFetchEvent(
                     userId: widget.myUser.uid,
                     isHardRefresh: state.isHardRefreshRequired,
