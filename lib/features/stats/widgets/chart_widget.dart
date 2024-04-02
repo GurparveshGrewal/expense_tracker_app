@@ -64,7 +64,9 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
           ),
           width: 20,
           backDrawRodData: BackgroundBarChartRodData(
-              show: true, toY: 5, color: Colors.grey.shade300))
+              show: true,
+              toY: _getMaximumValue(widget.expenses),
+              color: Colors.grey.shade300))
     ]);
   }
 
@@ -78,28 +80,6 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
     }
     return chartData;
   }
-  // List.generate(7, (i) {
-  //   switch (i) {
-  //     case 0:
-  //       return makeGroupData(0, 2, animationValue);
-  //     case 1:
-  //       return makeGroupData(1, 3, animationValue);
-  //     case 2:
-  //       return makeGroupData(2, 2, animationValue);
-  //     case 3:
-  //       return makeGroupData(3, 4.5, animationValue);
-  //     case 4:
-  //       return makeGroupData(4, 3.8, animationValue);
-  //     case 5:
-  //       return makeGroupData(5, 1.5, animationValue);
-  //     case 6:
-  //       return makeGroupData(6, 4, animationValue);
-  //     case 7:
-  //       return makeGroupData(7, 3.8, animationValue);
-  //     default:
-  //       return throw Error();
-  //   }
-  // });
 
   BarChartData mainBarData(List<double> amounts, double animationValue) {
     return BarChartData(
@@ -168,15 +148,9 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
     return date.day;
   }
 
-  // double _getMaximumValue(List<double> expenses) {
-  //   double maxValue =
-  //       expenses.reduce((value, element) => value > element ? value : element);
-  //   return maxValue;
-  // }
-
-  // double _getMinimumValue(List<double> expenses) {
-  //   double minValue =
-  //       expenses.reduce((value, element) => value < element ? value : element);
-  //   return minValue;
-  // }
+  double _getMaximumValue(List<double> expenses) {
+    double maxValue =
+        expenses.reduce((value, element) => value > element ? value : element);
+    return maxValue;
+  }
 }

@@ -44,6 +44,13 @@ class _AddNewExpensePageState extends State<AddNewExpensePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    expenseTextController.dispose();
+    noteTextController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

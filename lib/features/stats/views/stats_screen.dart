@@ -37,9 +37,11 @@ class _StatsPageState extends State<StatsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        title: const Text(
-          "Analyze your Expenses (Weekly)",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        title: const Center(
+          child: Text(
+            "Analyze your Expenses (Weekly)",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       body: BlocConsumer<StatsBloc, StatsState>(

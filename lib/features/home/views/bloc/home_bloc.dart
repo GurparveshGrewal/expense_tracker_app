@@ -50,8 +50,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ));
 
       emit(HomeInitializedState(
-        // TODO: remove constant dialog
-        showAddIncomeDialog: false,
+        showAddIncomeDialog: incomes.isEmpty,
         expenses: expenses,
         incomes: incomes,
       ));

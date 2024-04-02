@@ -1,5 +1,10 @@
+import 'package:expense_tracker_app/features/home/domain/entity/income_entity.dart';
+import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
+import 'package:expense_tracker_app/features/home/widgets/add_income_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 class StatsCard extends StatelessWidget {
   final double expensesAmount;
@@ -14,7 +19,7 @@ class StatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final TextEditingController incomeTextController = TextEditingController();
+    final TextEditingController incomeTextController = TextEditingController();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       decoration: BoxDecoration(
@@ -54,44 +59,73 @@ class StatsCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Row(
-                  children: [
-                    Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: const Icon(
-                        CupertinoIcons.arrow_down,
-                        size: 20,
-                        color: Colors.greenAccent,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Income",
-                          style: TextStyle(
-                              color: Colors.white60,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
+                child: GestureDetector(
+                  onTap: () {
+                    addIncomeDialog(
+                      context,
+                      uid: uid,
+                      controller: incomeTextController,
+                      negativeButtonTitle: "Cancel",
+                      positiveButtonTitle: "Add Income",
+                      negativeCallBack: () {
+                        Navigator.of(context).pop();
+                        incomeTextController.dispose();
+                      },
+                      positiveCallBack: () {
+                        Navigator.of(context).pop();
+                        context
+                            .read<HomeBloc>()
+                            .add(HomeAddIncomeToDatabaseEvent(
+                                income: IncomeEntity(
+                              userId: uid,
+                              incomeId: const Uuid().v4(),
+                              amount: double.parse(
+                                  incomeTextController.text.trim()),
+                              date: DateTime.now(),
+                            )));
+                        incomeTextController.dispose();
+                      },
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: const Icon(
+                          CupertinoIcons.arrow_down,
+                          size: 20,
+                          color: Colors.greenAccent,
                         ),
-                        Text(
-                          '\$${income.toString()}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Income",
+                            style: TextStyle(
+                                color: Colors.white60,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
                           ),
-                        )
-                      ],
-                    ),
-                  ],
+                          Text(
+                            '\$${income.toString()}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
