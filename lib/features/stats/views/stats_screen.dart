@@ -61,8 +61,11 @@ class _StatsPageState extends State<StatsPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const MyChart(
-                      expenses: [],
+                    child: MyChart(
+                      fromDate: widget.fromDate,
+                      toDate: widget.toDate,
+                      expenses: _getExpenses(
+                          widget.fromDate, widget.toDate, state.expenses),
                     ),
                   ),
                   const SizedBox(
@@ -123,11 +126,23 @@ class _StatsPageState extends State<StatsPage> {
     );
   }
 
-  // List<double> weekExpenses(
-  //     DateTime fromDate, DateTime toDate, List<ExpenseEntity> expenses) {
-  //   List<double> expensesAmounts = List.filled(7, 0.0);
-  //   for (ExpenseEntity expense in expenses) {
-  //     if (expense.expenseDate.isAfter(fromDate) &&
-  //         expense.expenseDate.isBefore(toDate)) {}
-  //   }
+  List<double> _getExpenses(
+      DateTime fromDate, DateTime toDate, List<ExpenseEntity> expenses) {
+    List<double> expensesAmounts = List.filled(7, 0.0);
+
+    for (int i = 0; i < 7; i++) {
+      DateTime currentDate = fromDate.add(Duration(days: i));
+
+      double totalAmount = expenses
+          .where((expense) =>
+              expense.expenseDate.year == currentDate.year &&
+              expense.expenseDate.month == currentDate.month &&
+              expense.expenseDate.day == currentDate.day)
+          .fold(0.0, (sum, expense) => sum + expense.expenseAmount);
+
+      expensesAmounts[i] = totalAmount;
+    }
+
+    return expensesAmounts;
+  }
 }

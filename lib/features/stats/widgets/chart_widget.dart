@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 
 class MyChart extends StatefulWidget {
   final List<double> expenses;
-  const MyChart({required this.expenses, super.key});
+  final DateTime fromDate;
+  final DateTime toDate;
+  const MyChart(
+      {required this.expenses,
+      required this.fromDate,
+      required this.toDate,
+      super.key});
 
   @override
   State<MyChart> createState() => _MyChartState();
@@ -39,7 +45,7 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
         animation: _animation,
         builder: (context, _) {
           return BarChart(
-            mainBarData(_animation.value),
+            mainBarData(widget.expenses, _animation.value),
           );
         });
   }
@@ -62,31 +68,40 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
     ]);
   }
 
-  List<BarChartGroupData> showingGroups(double animationValue) =>
-      List.generate(7, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(0, 2, animationValue);
-          case 1:
-            return makeGroupData(1, 3, animationValue);
-          case 2:
-            return makeGroupData(2, 2, animationValue);
-          case 3:
-            return makeGroupData(3, 4.5, animationValue);
-          case 4:
-            return makeGroupData(4, 3.8, animationValue);
-          case 5:
-            return makeGroupData(5, 1.5, animationValue);
-          case 6:
-            return makeGroupData(6, 4, animationValue);
-          case 7:
-            return makeGroupData(7, 3.8, animationValue);
-          default:
-            return throw Error();
-        }
-      });
+  List<BarChartGroupData> showingGroups(
+      List<double> amounts, double animationValue) {
+    List<BarChartGroupData> chartData = [];
+    int index = 0;
+    for (var amount in amounts) {
+      chartData.add(makeGroupData(_getDate(index), amount, animationValue));
+      index++;
+    }
+    return chartData;
+  }
+  // List.generate(7, (i) {
+  //   switch (i) {
+  //     case 0:
+  //       return makeGroupData(0, 2, animationValue);
+  //     case 1:
+  //       return makeGroupData(1, 3, animationValue);
+  //     case 2:
+  //       return makeGroupData(2, 2, animationValue);
+  //     case 3:
+  //       return makeGroupData(3, 4.5, animationValue);
+  //     case 4:
+  //       return makeGroupData(4, 3.8, animationValue);
+  //     case 5:
+  //       return makeGroupData(5, 1.5, animationValue);
+  //     case 6:
+  //       return makeGroupData(6, 4, animationValue);
+  //     case 7:
+  //       return makeGroupData(7, 3.8, animationValue);
+  //     default:
+  //       return throw Error();
+  //   }
+  // });
 
-  BarChartData mainBarData(double animationValue) {
+  BarChartData mainBarData(List<double> amounts, double animationValue) {
     return BarChartData(
       titlesData: FlTitlesData(
         show: true,
@@ -109,7 +124,7 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
       ),
       borderData: FlBorderData(show: false),
       gridData: const FlGridData(show: false),
-      barGroups: showingGroups(animationValue),
+      barGroups: showingGroups(amounts, animationValue),
     );
   }
 
@@ -119,37 +134,11 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    Widget text;
+    Widget text = Text(
+      value.toInt().toString(),
+      style: style,
+    );
 
-    switch (value.toInt()) {
-      case 0:
-        text = const Text('01', style: style);
-        break;
-      case 1:
-        text = const Text('02', style: style);
-        break;
-      case 2:
-        text = const Text('03', style: style);
-        break;
-      case 3:
-        text = const Text('04', style: style);
-        break;
-      case 4:
-        text = const Text('05', style: style);
-        break;
-      case 5:
-        text = const Text('06', style: style);
-        break;
-      case 6:
-        text = const Text('07', style: style);
-        break;
-      case 7:
-        text = const Text('08', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
-    }
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 16,
@@ -163,24 +152,31 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    String text;
-    if (value == 0) {
-      text = '1K';
-    } else if (value == 2) {
-      text = '2K';
-    } else if (value == 3) {
-      text = '3K';
-    } else if (value == 4) {
-      text = '4K';
-    } else if (value == 5) {
-      text = '5K';
-    } else {
-      return Container();
-    }
+
+    String text = value.toInt().toString();
+
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 0,
       child: Text(text, style: style),
     );
   }
+
+  int _getDate(int index) {
+    DateTime date = widget.fromDate.add(Duration(days: index));
+
+    return date.day;
+  }
+
+  // double _getMaximumValue(List<double> expenses) {
+  //   double maxValue =
+  //       expenses.reduce((value, element) => value > element ? value : element);
+  //   return maxValue;
+  // }
+
+  // double _getMinimumValue(List<double> expenses) {
+  //   double minValue =
+  //       expenses.reduce((value, element) => value < element ? value : element);
+  //   return minValue;
+  // }
 }

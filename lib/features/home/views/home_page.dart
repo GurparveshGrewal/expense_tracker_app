@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                 );
               } else {
                 return StatsPage(
-                  fromDate: DateTime.now().subtract(const Duration(days: 7)),
+                  fromDate: DateTime.now().subtract(const Duration(days: 6)),
                   toDate: DateTime.now(),
                 );
               }
