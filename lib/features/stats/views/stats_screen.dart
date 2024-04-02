@@ -1,11 +1,11 @@
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
+import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
 import 'package:expense_tracker_app/features/stats/bloc/stats_bloc.dart';
 import 'package:expense_tracker_app/features/stats/widgets/chart_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class StatsPage extends StatefulWidget {
   final DateTime fromDate;
@@ -71,7 +71,13 @@ class _StatsPageState extends State<StatsPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text("Week - ?"),
+                  Text(
+                    "${convertDateToReadable(widget.fromDate)} - ${convertDateToReadable(widget.toDate)}",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -81,18 +87,18 @@ class _StatsPageState extends State<StatsPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          DateFormat.yMMMd().format(DateTime.now()),
+                          "Transactions",
                           style: TextStyle(
-                            color: Colors.grey.shade800,
-                            fontSize: 15,
-                          ),
+                              color: Colors.grey.shade800,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          "-\$500.00",
+                          '\$${_getTotalAmountForTheWeek(state.expenses).toString()}/-',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontSize: 14,
-                          ),
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
@@ -102,10 +108,10 @@ class _StatsPageState extends State<StatsPage> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                        itemCount: 3,
+                        itemCount: state.expenses.length,
                         itemBuilder: (context, index) {
                           return ExpenseCard(
-                            expense: ExpenseEntity.empty(),
+                            expense: state.expenses[index],
                             icon: Icons.food_bank_outlined,
                             backgroundColor: index % 2 == 0
                                 ? Theme.of(context).colorScheme.secondary
@@ -144,5 +150,10 @@ class _StatsPageState extends State<StatsPage> {
     }
 
     return expensesAmounts;
+  }
+
+  double _getTotalAmountForTheWeek(List<ExpenseEntity> expenses) {
+    return expenses.fold(
+        0.0, (value, expense) => value + expense.expenseAmount);
   }
 }

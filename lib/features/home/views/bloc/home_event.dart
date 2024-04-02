@@ -13,9 +13,11 @@ class HomeAddExpenseToDatabaseProcessEvent extends HomeEvent {
 
 class HomeInitialFetchEvent extends HomeEvent {
   final String userId;
+  final bool isHardRefresh;
 
   HomeInitialFetchEvent({
     required this.userId,
+    this.isHardRefresh = false,
   });
 }
 

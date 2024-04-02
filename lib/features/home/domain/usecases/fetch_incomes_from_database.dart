@@ -9,16 +9,20 @@ class FetchIncomesFromDatabaseUsecase
 
   @override
   Future<List<IncomeEntity>> call(FetchIncomesFromDatabaseParams params) async {
-    final incomes =
-        await _repository.fetchIncomesFromDatabase(uid: params.userId);
+    final incomes = await _repository.fetchIncomesFromDatabase(
+      uid: params.userId,
+      isHardRefresh: params.isHardRefresh,
+    );
     return incomes;
   }
 }
 
 class FetchIncomesFromDatabaseParams {
   final String userId;
+  final bool isHardRefresh;
 
   FetchIncomesFromDatabaseParams({
     required this.userId,
+    required this.isHardRefresh,
   });
 }

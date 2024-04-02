@@ -37,11 +37,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeInitialFetchEvent event, Emitter<HomeState> emit) async {
     try {
       final expenses = await _fetchExpensesFromDatabaseUsecase(
-        FetchExpensesFromDatabaseParams(userId: event.userId),
+        FetchExpensesFromDatabaseParams(
+          userId: event.userId,
+          isHardRefresh: event.isHardRefresh,
+        ),
       );
 
-      final incomes = await _fetchIncomesFromDatabaseUsecase(
-          FetchIncomesFromDatabaseParams(userId: event.userId));
+      final incomes =
+          await _fetchIncomesFromDatabaseUsecase(FetchIncomesFromDatabaseParams(
+        userId: event.userId,
+        isHardRefresh: event.isHardRefresh,
+      ));
 
       emit(HomeInitializedState(
         // TODO: remove constant dialog
@@ -60,7 +66,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await _addExpenseToDatabaseUsecase(
           AddExpenseToDatabaseParams(expense: event.expense));
 
-      emit(HomeExpenseAddedSuccessState());
+      emit(HomeExpenseAddedSuccessState(
+        isHardRefreshRequired: true,
+      ));
     } catch (e) {
       emit(HomeFailedState());
     }
@@ -72,7 +80,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await _addIncomeToDatabaseUsecase(
           AddIncomeToDatabaseParams(income: event.income));
 
-      emit(HomeIncomeAddedSuccessState(income: event.income));
+      emit(HomeIncomeAddedSuccessState(
+        income: event.income,
+        isHardRefreshRequired: true,
+      ));
     } catch (e) {
       emit(HomeFailedState());
     }

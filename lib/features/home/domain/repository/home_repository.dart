@@ -6,13 +6,19 @@ abstract class HomeRepository {
     required ExpenseEntity expense,
   });
 
-  Future<List<ExpenseEntity>> fetchExpensesFromDatabase({required String uid});
+  Future<List<ExpenseEntity>> fetchExpensesFromDatabase({
+    required String uid,
+    required bool isHardRefresh,
+  });
 
   Future<void> addIncomeToDatabase({
     required IncomeEntity income,
   });
 
-  Future<List<IncomeEntity>> fetchIncomesFromDatabase({required String uid});
+  Future<List<IncomeEntity>> fetchIncomesFromDatabase({
+    required String uid,
+    required bool isHardRefresh,
+  });
 
   List<ExpenseEntity> fetchFilteredExpenses({
     required DateTime fromDate,

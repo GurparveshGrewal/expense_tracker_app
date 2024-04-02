@@ -24,10 +24,12 @@ class HomeRepositoryImpl extends HomeRepository {
   }
 
   @override
-  Future<List<ExpenseEntity>> fetchExpensesFromDatabase(
-      {required String uid}) async {
+  Future<List<ExpenseEntity>> fetchExpensesFromDatabase({
+    required String uid,
+    required bool isHardRefresh,
+  }) async {
     try {
-      if (_cachedExpenses.isEmpty) {
+      if (_cachedExpenses.isEmpty || isHardRefresh) {
         final List<ExpenseEntity> expenses = [];
         final rawExpenses = await _firestoreDatabaseWrapper
             .fetchExpenseFromDatabase(userId: uid);
@@ -58,10 +60,12 @@ class HomeRepositoryImpl extends HomeRepository {
   }
 
   @override
-  Future<List<IncomeEntity>> fetchIncomesFromDatabase(
-      {required String uid}) async {
+  Future<List<IncomeEntity>> fetchIncomesFromDatabase({
+    required String uid,
+    required bool isHardRefresh,
+  }) async {
     try {
-      if (_cachedIncomes.isEmpty) {
+      if (_cachedIncomes.isEmpty || isHardRefresh) {
         final List<IncomeEntity> userIncomes = [];
         final incomes = await _firestoreDatabaseWrapper.fetchIncomeFromDatabase(
             userId: uid);
@@ -108,6 +112,7 @@ class HomeRepositoryImpl extends HomeRepository {
   bool _isDateInRange(DateTime date, DateTime startDate, DateTime endDate) {
     return date.isAtSameMomentAs(startDate) ||
         date.isAtSameMomentAs(endDate) ||
-        (date.isAfter(startDate) && date.isBefore(endDate));
+        (date.isAfter(startDate.subtract(const Duration(days: 1))) &&
+            date.isBefore(endDate));
   }
 }
