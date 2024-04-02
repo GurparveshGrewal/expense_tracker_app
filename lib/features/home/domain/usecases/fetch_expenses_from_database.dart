@@ -10,16 +10,20 @@ class FetchExpensesFromDatabaseUsecase
   @override
   Future<List<ExpenseEntity>> call(
       FetchExpensesFromDatabaseParams params) async {
-    final expenses =
-        await _repository.fetchExpensesFromDatabase(uid: params.userId);
+    final expenses = await _repository.fetchExpensesFromDatabase(
+      uid: params.userId,
+      isHardRefresh: params.isHardRefresh,
+    );
     return expenses;
   }
 }
 
 class FetchExpensesFromDatabaseParams {
   final String userId;
+  final bool isHardRefresh;
 
   FetchExpensesFromDatabaseParams({
     required this.userId,
+    required this.isHardRefresh,
   });
 }

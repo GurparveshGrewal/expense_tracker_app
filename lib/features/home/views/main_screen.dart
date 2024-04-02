@@ -24,6 +24,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final TextEditingController _incomeTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     if (widget.initializedState.showAddIncomeDialog) {
@@ -37,14 +38,17 @@ class _MainScreenState extends State<MainScreen> {
           Navigator.of(context).pop();
           addIncomeDialog(
             context,
-            controller: TextEditingController(),
+            uid: widget.currentUser.uid,
+            controller: _incomeTextController,
             negativeButtonTitle: "Cancel",
             positiveButtonTitle: "Add Income",
-            negativeCallBack: Navigator.of(context).pop,
-            positiveCallBack: () {
+            negativeCallBack: () {
               Navigator.of(context).pop();
+              _incomeTextController.dispose();
             },
+            positiveCallBack: Navigator.of(context).pop,
           );
+          _incomeTextController.dispose();
         });
       });
     }

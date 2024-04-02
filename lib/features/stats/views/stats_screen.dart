@@ -1,78 +1,161 @@
+import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
+import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
+import 'package:expense_tracker_app/features/stats/bloc/stats_bloc.dart';
 import 'package:expense_tracker_app/features/stats/widgets/chart_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class StatsPage extends StatelessWidget {
-  const StatsPage({super.key});
+class StatsPage extends StatefulWidget {
+  final DateTime fromDate;
+  final DateTime toDate;
+
+  const StatsPage({
+    required this.fromDate,
+    required this.toDate,
+    super.key,
+  });
+
+  @override
+  State<StatsPage> createState() => _StatsPageState();
+}
+
+class _StatsPageState extends State<StatsPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<StatsBloc>().add(StatsInitialFetch(
+          income: 700,
+          fromDate: widget.fromDate,
+          toDate: widget.toDate,
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        title: const Text(
-          "Transactions",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        title: const Center(
+          child: Text(
+            "Analyze your Expenses (Weekly)",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-        child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.width / 1.5,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const MyChart(),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: BlocConsumer<StatsBloc, StatsState>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          if (state is StatsLoadingState) return const Loader();
+
+          if (state is StatsInitializedState) {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+              child: Column(
                 children: [
-                  Text(
-                    DateFormat.yMMMd().format(DateTime.now()),
-                    style: TextStyle(
-                      color: Colors.grey.shade800,
-                      fontSize: 15,
+                  Container(
+                    height: MediaQuery.of(context).size.width / 1.5,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: MyChart(
+                      fromDate: widget.fromDate,
+                      toDate: widget.toDate,
+                      expenses: _getExpenses(
+                          widget.fromDate, widget.toDate, state.expenses),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Text(
-                    "-\$500.00",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontSize: 14,
+                    "${convertDateToReadable(widget.fromDate)} - ${convertDateToReadable(widget.toDate)}",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Transactions",
+                          style: TextStyle(
+                              color: Colors.grey.shade800,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        Text(
+                          '\$${_getTotalAmountForTheWeek(state.expenses).toString()}/-',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: state.expenses.length,
+                        itemBuilder: (context, index) {
+                          return ExpenseCard(
+                            expense: state.expenses[index],
+                            icon: Icons.food_bank_outlined,
+                            backgroundColor: index % 2 == 0
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).colorScheme.primary,
+                          );
+                        }),
+                  )
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return ExpenseCard(
-                      expense: ExpenseEntity.empty(),
-                      icon: Icons.food_bank_outlined,
-                      backgroundColor: index % 2 == 0
-                          ? Theme.of(context).colorScheme.secondary
-                          : Theme.of(context).colorScheme.primary,
-                    );
-                  }),
-            )
-          ],
-        ),
+            );
+          }
+
+          return const Center(
+            child: Text("Something went wrong"),
+          );
+        },
       ),
     );
+  }
+
+  List<double> _getExpenses(
+      DateTime fromDate, DateTime toDate, List<ExpenseEntity> expenses) {
+    List<double> expensesAmounts = List.filled(7, 0.0);
+
+    for (int i = 0; i < 7; i++) {
+      DateTime currentDate = fromDate.add(Duration(days: i));
+
+      double totalAmount = expenses
+          .where((expense) =>
+              expense.expenseDate.year == currentDate.year &&
+              expense.expenseDate.month == currentDate.month &&
+              expense.expenseDate.day == currentDate.day)
+          .fold(0.0, (sum, expense) => sum + expense.expenseAmount);
+
+      expensesAmounts[i] = totalAmount;
+    }
+
+    return expensesAmounts;
+  }
+
+  double _getTotalAmountForTheWeek(List<ExpenseEntity> expenses) {
+    return expenses.fold(
+        0.0, (value, expense) => value + expense.expenseAmount);
   }
 }

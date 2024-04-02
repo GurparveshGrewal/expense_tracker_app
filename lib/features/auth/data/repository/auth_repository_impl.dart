@@ -64,9 +64,11 @@ class AuthRepositoryImpl extends AuthRepository {
       final currentUser = _firebaseAuthWrapper.currentUser;
 
       if (currentUser != null) {
+        final userData =
+            await _firestoreDatabaseWrapper.getUserData(uid: currentUser.uid);
         return MyUser(
             uid: currentUser.uid,
-            fullName: currentUser.displayName ?? "fullName",
+            fullName: userData['fullName'] ?? "fullName",
             email: currentUser.email!);
       }
 

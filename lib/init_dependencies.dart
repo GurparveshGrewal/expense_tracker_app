@@ -14,8 +14,10 @@ import 'package:expense_tracker_app/features/home/domain/repository/home_reposit
 import 'package:expense_tracker_app/features/home/domain/usecases/add_expense_to_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/add_income_to_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_expenses_from_database.dart';
+import 'package:expense_tracker_app/features/home/domain/usecases/fetch_filtered_expenses.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_incomes_from_database.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
+import 'package:expense_tracker_app/features/stats/bloc/stats_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final serviceLocator = GetIt.instance;
@@ -60,7 +62,7 @@ void _initAuth() {
 }
 
 void _initHome() {
-  serviceLocator.registerFactory<HomeRepository>(() => HomeRepositoryImpl(
+  serviceLocator.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(
         serviceLocator(),
       ));
 
@@ -73,6 +75,8 @@ void _initHome() {
       .registerFactory(() => AddIncomeToDatabaseUsecase(serviceLocator()));
   serviceLocator
       .registerFactory(() => FetchIncomesFromDatabaseUsecase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => FetchFilteredExpensesUsecase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => HomeBloc(
@@ -80,5 +84,8 @@ void _initHome() {
         fetchExpensesFromDatabaseUsecase: serviceLocator(),
         fetchIncomes: serviceLocator(),
         addIncomeToDatabaseUsecase: serviceLocator(),
+      ));
+  serviceLocator.registerLazySingleton(() => StatsBloc(
+        filteredExpenseUsercase: serviceLocator(),
       ));
 }

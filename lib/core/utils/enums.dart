@@ -5,4 +5,7 @@ enum ExpenseCategory {
   entertainment,
   grocery,
   misc,
+  health,
+  maintenance,
+  vehicles,
 }

@@ -8,6 +8,9 @@ class HomeRepositoryImpl extends HomeRepository {
 
   HomeRepositoryImpl(this._firestoreDatabaseWrapper);
 
+  List<ExpenseEntity> _cachedExpenses = [];
+  List<IncomeEntity> _cachedIncomes = [];
+
   @override
   Future<void> addExpenseToDatabase({
     required ExpenseEntity expense,
@@ -21,20 +24,26 @@ class HomeRepositoryImpl extends HomeRepository {
   }
 
   @override
-  Future<List<ExpenseEntity>> fetchExpensesFromDatabase(
-      {required String uid}) async {
+  Future<List<ExpenseEntity>> fetchExpensesFromDatabase({
+    required String uid,
+    required bool isHardRefresh,
+  }) async {
     try {
-      final List<ExpenseEntity> expenses = [];
-      final rawExpenses =
-          await _firestoreDatabaseWrapper.fetchExpenseFromDatabase(userId: uid);
+      if (_cachedExpenses.isEmpty || isHardRefresh) {
+        final List<ExpenseEntity> expenses = [];
+        final rawExpenses = await _firestoreDatabaseWrapper
+            .fetchExpenseFromDatabase(userId: uid);
 
-      if (rawExpenses.isNotEmpty) {
-        for (var rawData in rawExpenses) {
-          expenses.add(ExpenseEntity.toEntity(rawData));
+        if (rawExpenses.isNotEmpty) {
+          for (var rawData in rawExpenses) {
+            expenses.add(ExpenseEntity.toEntity(rawData));
+          }
+
+          _cachedExpenses = expenses;
         }
       }
 
-      return expenses;
+      return _cachedExpenses;
     } catch (e) {
       rethrow;
     }
@@ -51,29 +60,59 @@ class HomeRepositoryImpl extends HomeRepository {
   }
 
   @override
-  Future<List<IncomeEntity>> fetchIncomesFromDatabase(
-      {required String uid}) async {
+  Future<List<IncomeEntity>> fetchIncomesFromDatabase({
+    required String uid,
+    required bool isHardRefresh,
+  }) async {
     try {
-      final List<IncomeEntity> userIncomes = [];
-      final incomes =
-          await _firestoreDatabaseWrapper.fetchIncomeFromDatabase(userId: uid);
+      if (_cachedIncomes.isEmpty || isHardRefresh) {
+        final List<IncomeEntity> userIncomes = [];
+        final incomes = await _firestoreDatabaseWrapper.fetchIncomeFromDatabase(
+            userId: uid);
 
-      if (incomes.isNotEmpty) {
-        for (var income in incomes) {
-          userIncomes.add(
-            IncomeEntity(
-              userId: income['userId'],
-              incomeId: income['incomeId'],
-              amount: double.parse(income['amount']),
-              date: DateTime.parse(income['date']),
-            ),
-          );
+        if (incomes.isNotEmpty) {
+          for (var income in incomes) {
+            userIncomes.add(
+              IncomeEntity(
+                userId: income['userId'],
+                incomeId: income['incomeId'],
+                amount: double.parse(income['amount']),
+                date: DateTime.parse(income['date']),
+              ),
+            );
+          }
         }
-      }
 
-      return userIncomes;
+        _cachedIncomes = userIncomes;
+      }
+      return _cachedIncomes;
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  List<ExpenseEntity> fetchFilteredExpenses(
+      {required DateTime fromDate, required DateTime toDate}) {
+    if (_cachedExpenses.isEmpty) {
+      return [];
+    }
+
+    List<ExpenseEntity> expenses = [];
+    for (var expense in _cachedExpenses) {
+      if (_isDateInRange(expense.expenseDate, fromDate, toDate)) {
+        expenses.add(expense);
+      }
+    }
+
+    expenses.sort((a, b) => a.expenseDate.compareTo(b.expenseDate));
+    return expenses;
+  }
+
+  bool _isDateInRange(DateTime date, DateTime startDate, DateTime endDate) {
+    return date.isAtSameMomentAs(startDate) ||
+        date.isAtSameMomentAs(endDate) ||
+        (date.isAfter(startDate.subtract(const Duration(days: 1))) &&
+            date.isBefore(endDate));
   }
 }

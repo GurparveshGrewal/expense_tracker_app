@@ -80,13 +80,15 @@ class _HomePageState extends State<HomePage> {
         body: BlocConsumer<HomeBloc, HomeState>(
           listener: (context, state) {
             if (state is HomeExpenseAddedSuccessState) {
-              context
-                  .read<HomeBloc>()
-                  .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+              context.read<HomeBloc>().add(HomeInitialFetchEvent(
+                    userId: widget.myUser.uid,
+                    isHardRefresh: state.isHardRefreshRequired,
+                  ));
             } else if (state is HomeIncomeAddedSuccessState) {
-              context
-                  .read<HomeBloc>()
-                  .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+              context.read<HomeBloc>().add(HomeInitialFetchEvent(
+                    userId: widget.myUser.uid,
+                    isHardRefresh: state.isHardRefreshRequired,
+                  ));
             }
           },
           builder: (context, state) {
@@ -99,7 +101,10 @@ class _HomePageState extends State<HomePage> {
                   currentUser: widget.myUser,
                 );
               } else {
-                return const StatsPage();
+                return StatsPage(
+                  fromDate: DateTime.now().subtract(const Duration(days: 6)),
+                  toDate: DateTime.now(),
+                );
               }
             }
 

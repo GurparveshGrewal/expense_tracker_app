@@ -18,7 +18,7 @@ class HomeInitializedState extends HomeState {
     required this.showAddIncomeDialog,
   });
 
-  HomeInitializedState copyWith(
+  static HomeInitializedState copyWith(
     HomeInitializedState prevState, {
     List<ExpenseEntity>? expenses,
     List<IncomeEntity>? incomes,
@@ -32,12 +32,22 @@ class HomeInitializedState extends HomeState {
   }
 }
 
-class HomeExpenseAddedSuccessState extends HomeState {}
+class HomeExpenseAddedSuccessState extends HomeState {
+  final bool isHardRefreshRequired;
+
+  HomeExpenseAddedSuccessState({
+    required this.isHardRefreshRequired,
+  });
+}
 
 class HomeIncomeAddedSuccessState extends HomeState {
   final IncomeEntity income;
+  final bool isHardRefreshRequired;
 
-  HomeIncomeAddedSuccessState({required this.income});
+  HomeIncomeAddedSuccessState({
+    required this.income,
+    required this.isHardRefreshRequired,
+  });
 }
 
 class HomeFailedState extends HomeState {}
