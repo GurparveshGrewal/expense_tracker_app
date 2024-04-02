@@ -68,6 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 30,
                   ),
                   CommonGradientButton(
+                      disabled: false,
                       buttonTitle: "SIGN UP",
                       onTap: () {
                         context.read<AuthBloc>().add(AuthSignUpProcessEvent(

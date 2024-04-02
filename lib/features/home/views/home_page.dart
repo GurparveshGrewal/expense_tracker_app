@@ -1,9 +1,9 @@
-import 'package:expense_tracker_app/core/commons/widgets/double_action_alert_dialog.dart';
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/home/views/add_new_expense_page.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:expense_tracker_app/features/home/views/main_screen.dart';
+import 'package:expense_tracker_app/features/home/widgets/select_currency_dialog.dart';
 import 'package:expense_tracker_app/features/stats/views/stats_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,15 +37,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     if (_showSelectCurrencyDialog) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        doubleActionAlertDialog(
-          context,
-          title: 'Welcome to EXPENDS',
-          content: 'To proceed ahead, please select your currency.',
-          negativeButtonTitle: '',
-          positiveButtonTitle: 'Select Currency',
-          negativeCallBack: () {},
-          positiveCallBack: () {},
-        );
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (ctx) => const SelectCurrencyDialog());
       });
     }
 

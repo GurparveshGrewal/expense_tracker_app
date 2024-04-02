@@ -58,6 +58,7 @@ class _SignInPageState extends State<SignInPage> {
                     height: 30,
                   ),
                   CommonGradientButton(
+                      disabled: false,
                       buttonTitle: "SIGN IN",
                       onTap: () {
                         context.read<AuthBloc>().add(AuthSignInProcessEvent(

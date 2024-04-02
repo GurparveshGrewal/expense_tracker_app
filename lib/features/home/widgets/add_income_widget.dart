@@ -48,6 +48,7 @@ void addIncomeDialog(
                           ))),
                   Expanded(
                       child: CommonGradientButton(
+                          disabled: false,
                           buttonTitle: positiveButtonTitle,
                           onTap: () {
                             if (globalKey.currentState!.validate()) {

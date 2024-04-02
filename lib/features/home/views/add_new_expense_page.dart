@@ -216,6 +216,7 @@ class _AddNewExpensePageState extends State<AddNewExpensePage> {
                   ),
                 ),
                 CommonGradientButton(
+                    disabled: false,
                     buttonTitle: "SAVE",
                     onTap: () {
                       if (_formKey.currentState!.validate() &&
