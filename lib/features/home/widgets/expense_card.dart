@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/core/utils/enums.dart';
 import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +7,12 @@ class ExpenseCard extends StatefulWidget {
   final ExpenseEntity expense;
   final Color backgroundColor;
   final IconData icon;
+  final Currency currency;
   const ExpenseCard(
       {required this.expense,
       required this.backgroundColor,
       required this.icon,
+      required this.currency,
       super.key});
 
   @override
@@ -71,7 +74,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '\$${widget.expense.expenseAmount.toString()}',
+                                '${getTextForCurrency(widget.currency)}${widget.expense.expenseAmount.toString()}',
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w400),
                               ),
@@ -128,7 +131,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '\$${widget.expense.expenseAmount.toString()}',
+                                  '${getTextForCurrency(widget.currency)}${widget.expense.expenseAmount.toString()}',
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400),

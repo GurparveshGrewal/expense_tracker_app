@@ -8,6 +8,7 @@ import 'package:expense_tracker_app/features/auth/domain/usecases/sign_out.dart'
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_email_password%20.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_google.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signup_with_email_password.dart';
+import 'package:expense_tracker_app/features/auth/domain/usecases/clear_shared_prefs_usecase.dart';
 import 'package:flutter/material.dart';
 
 part 'auth_event.dart';
@@ -19,8 +20,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final CheckCurrentUserUsecase _checkCurrentUserUsecase;
   final SignInWithGoogleUsecase _signInWithGoogleUsecase;
   final SignOutUsecase _signOutUsecase;
-
   final AppUserCubit _authCubit;
+  final ClearSharedPrefsUsecase _clearSharedPrefsUsecase;
   AuthBloc({
     required SignInWithEmailAndPasswordUsecase
         signInWithEmailAndPasswordUsecase,
@@ -30,12 +31,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required CheckCurrentUserUsecase checkCurrentUserUsecase,
     required SignOutUsecase signOutUsecase,
     required AppUserCubit authCubit,
+    required ClearSharedPrefsUsecase clearSharedPrefsUsecase,
   })  : _signInWithEmailAndPasswordUsecase = signInWithEmailAndPasswordUsecase,
         _signUpWithEmailAndPasswordUsecase = signUpWithEmailAndPasswordUsecase,
         _checkCurrentUserUsecase = checkCurrentUserUsecase,
         _signInWithGoogleUsecase = signInWithGoogleUsecase,
         _signOutUsecase = signOutUsecase,
         _authCubit = authCubit,
+        _clearSharedPrefsUsecase = clearSharedPrefsUsecase,
         super(AuthInitialState()) {
     on<AuthEvent>((event, emit) {
       if (event is AuthSignOutEvent) {
@@ -105,6 +108,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> authSignOutEvent(
       AuthSignOutEvent event, Emitter<AuthState> emit) async {
     await _signOutUsecase({});
+    await _clearSharedPrefsUsecase({});
 
     _authCubit.updateUser(null);
   }

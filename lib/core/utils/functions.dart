@@ -17,20 +17,31 @@ String convertDateToReadable(DateTime timestamp) {
   return DateFormat.yMMMMd().format(timestamp);
 }
 
+String getTextForCurrency(Currency selectedCurrency) {
+  switch (selectedCurrency) {
+    case Currency.cad:
+      return 'CA\$';
+    case Currency.eur:
+      return '€';
+    case Currency.inr:
+      return '₹';
+    case Currency.usd:
+      return '\$';
+    default:
+      return '?';
+  }
+}
+
 IconData getIconForCurrency(Currency userCurrency) {
   switch (userCurrency) {
     case Currency.cad:
       return FontAwesomeIcons.dollarSign;
-
-    case Currency.usd:
-      return FontAwesomeIcons.dollarSign;
-
-    case Currency.inr:
-      return FontAwesomeIcons.indianRupeeSign;
-
     case Currency.eur:
       return FontAwesomeIcons.euroSign;
-
+    case Currency.inr:
+      return FontAwesomeIcons.indianRupeeSign;
+    case Currency.usd:
+      return FontAwesomeIcons.dollarSign;
     default:
       return FontAwesomeIcons.exclamation;
   }

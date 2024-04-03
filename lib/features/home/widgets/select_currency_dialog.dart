@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectCurrencyDialog extends StatefulWidget {
-  const SelectCurrencyDialog({super.key});
+  final String uid;
+  const SelectCurrencyDialog({
+    required this.uid,
+    super.key,
+  });
 
   @override
   State<SelectCurrencyDialog> createState() => _SelectCurrencyDialogState();
@@ -65,7 +69,9 @@ class _SelectCurrencyDialogState extends State<SelectCurrencyDialog> {
                   onTap: () {
                     Navigator.of(context).pop();
                     context.read<HomeBloc>().add(HomeSaveSelectedCurrencyEvent(
-                        selectedCurrency: _selectedCurrency!));
+                          selectedCurrency: _selectedCurrency!,
+                          uid: widget.uid,
+                        ));
                   },
                 ),
               ),

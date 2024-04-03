@@ -9,11 +9,14 @@ import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.d
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class AddNewExpensePage extends StatefulWidget {
-  const AddNewExpensePage({super.key});
+  final Currency currency;
+  const AddNewExpensePage({
+    required this.currency,
+    super.key,
+  });
 
   @override
   State<AddNewExpensePage> createState() => _AddNewExpensePageState();
@@ -112,7 +115,7 @@ class _AddNewExpensePageState extends State<AddNewExpensePage> {
                                   child: IconTextFieldWidget(
                                     allowAmountValueOnly: true,
                                     controller: expenseTextController,
-                                    icon: FontAwesomeIcons.dollarSign,
+                                    icon: getIconForCurrency(widget.currency),
                                   ),
                                 ),
                                 const SizedBox(height: 30),

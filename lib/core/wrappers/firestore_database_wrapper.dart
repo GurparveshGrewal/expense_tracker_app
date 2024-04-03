@@ -90,4 +90,15 @@ class FirestoreDatabaseWrapper {
       rethrow;
     }
   }
+
+  Future<void> saveSelectedCurrency(String selectedCurrency, String uid) async {
+    try {
+      await _firebaseFirestore
+          .collection(_userCollectionName)
+          .doc(uid)
+          .set({'currency': selectedCurrency}, SetOptions(merge: true));
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

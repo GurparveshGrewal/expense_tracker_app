@@ -1,4 +1,5 @@
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
+import 'package:expense_tracker_app/core/utils/enums.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/home/views/add_new_expense_page.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
@@ -40,7 +41,9 @@ class _HomePageState extends State<HomePage> {
         showDialog(
             barrierDismissible: false,
             context: context,
-            builder: (ctx) => const SelectCurrencyDialog());
+            builder: (ctx) => SelectCurrencyDialog(
+                  uid: widget.myUser.uid,
+                ));
       });
     }
 
@@ -69,8 +72,11 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton(
             shape: const CircleBorder(),
             onPressed: () {
+              // TODO: change constant value
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => const AddNewExpensePage()));
+                  builder: (ctx) => const AddNewExpensePage(
+                        currency: Currency.inr,
+                      )));
             },
             child: Container(
                 height: 60,

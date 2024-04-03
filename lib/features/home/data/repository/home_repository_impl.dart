@@ -15,22 +15,25 @@ class HomeRepositoryImpl extends HomeRepository {
     this._sharedPreferencesRepository,
   );
 
-  // keys
-  static const String _keyNameCurrencyPrefs = 'currency';
-
   List<ExpenseEntity> _cachedExpenses = [];
   List<IncomeEntity> _cachedIncomes = [];
 
   @override
   Future<String?> checkSelectedCurrency() async {
-    return await _sharedPreferencesRepository
-        .getCurrency(_keyNameCurrencyPrefs);
+    return await _sharedPreferencesRepository.getCurrency();
   }
 
   @override
-  Future<void> saveSelectedCurrency(Currency selectedCurrency) async {
-    await _sharedPreferencesRepository.saveCurrency(
-        _keyNameCurrencyPrefs, enumValueToString(selectedCurrency));
+  Future<void> saveSelectedCurrency(
+      Currency selectedCurrency, String uid) async {
+    try {
+      await _firestoreDatabaseWrapper.saveSelectedCurrency(
+          enumValueToString(selectedCurrency), uid);
+      await _sharedPreferencesRepository
+          .saveCurrency(enumValueToString(selectedCurrency));
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override

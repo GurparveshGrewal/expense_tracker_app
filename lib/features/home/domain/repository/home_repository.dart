@@ -5,7 +5,10 @@ import 'package:expense_tracker_app/features/home/domain/entity/income_entity.da
 abstract class HomeRepository {
   Future<String?> checkSelectedCurrency();
 
-  Future<void> saveSelectedCurrency(Currency selectedCurrency);
+  Future<void> saveSelectedCurrency(
+    Currency selectedCurrency,
+    String uid,
+  );
 
   Future<void> addExpenseToDatabase({
     required ExpenseEntity expense,

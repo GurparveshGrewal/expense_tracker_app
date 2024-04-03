@@ -6,9 +6,11 @@ sealed class HomeEvent {}
 class HomeCheckSelectedCurrencyEvent extends HomeEvent {}
 
 class HomeSaveSelectedCurrencyEvent extends HomeEvent {
+  final String uid;
   final Currency selectedCurrency;
 
   HomeSaveSelectedCurrencyEvent({
+    required this.uid,
     required this.selectedCurrency,
   });
 }

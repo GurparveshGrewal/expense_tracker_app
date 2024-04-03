@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:expense_tracker_app/core/repository/shared_preferences_reposity.dart';
 import 'package:expense_tracker_app/core/utils/enums.dart';
 import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
@@ -23,14 +24,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final FetchExpensesFromDatabaseUsecase _fetchExpensesFromDatabaseUsecase;
   final FetchIncomesFromDatabaseUsecase _fetchIncomesFromDatabaseUsecase;
   final AddIncomeToDatabaseUsecase _addIncomeToDatabaseUsecase;
+  final SharedPreferencesRepository _sharedPreferencesRepository;
   HomeBloc({
+    required SharedPreferencesRepository sharedPreferencesRepository,
     required GetSavedCurrencyUsecase getSavedCurrencyUsecase,
     required SaveSelectedCurrencyUsecase saveSelectedCurrencyUsecase,
     required AddExpenseToDatabaseUsecase addExpenseToDatabaseUsecase,
     required FetchExpensesFromDatabaseUsecase fetchExpensesFromDatabaseUsecase,
     required FetchIncomesFromDatabaseUsecase fetchIncomes,
     required AddIncomeToDatabaseUsecase addIncomeToDatabaseUsecase,
-  })  : _getSavedCurrencyUsecase = getSavedCurrencyUsecase,
+  })  : _sharedPreferencesRepository = sharedPreferencesRepository,
+        _getSavedCurrencyUsecase = getSavedCurrencyUsecase,
         _saveSelectedCurrencyUsecase = saveSelectedCurrencyUsecase,
         _addExpenseToDatabaseUsecase = addExpenseToDatabaseUsecase,
         _fetchExpensesFromDatabaseUsecase = fetchExpensesFromDatabaseUsecase,
@@ -59,8 +63,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> saveSelectedCurrency(
       HomeSaveSelectedCurrencyEvent event, Emitter<HomeState> emit) async {
-    await _saveSelectedCurrencyUsecase(
-        SaveSelectedCurrencyParams(event.selectedCurrency));
+    await _saveSelectedCurrencyUsecase(SaveSelectedCurrencyParams(
+      selectedCurrency: event.selectedCurrency,
+      uid: event.uid,
+    ));
 
     emit(HomeSuccessfullyFetchedCurrencyState(
         selectedCurrency: event.selectedCurrency));
@@ -82,7 +88,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         isHardRefresh: event.isHardRefresh,
       ));
 
+      final currency = await _sharedPreferencesRepository.getCurrency();
+
       emit(HomeInitializedState(
+        currency: convertStringToEnum(Currency.values, currency),
         showAddIncomeDialog: incomes.isEmpty,
         expenses: expenses,
         incomes: incomes,

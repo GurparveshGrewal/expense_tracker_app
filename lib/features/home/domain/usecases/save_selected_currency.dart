@@ -12,14 +12,17 @@ class SaveSelectedCurrencyUsecase
   Future<void> call(SaveSelectedCurrencyParams params) async {
     await _repository.saveSelectedCurrency(
       params.selectedCurrency,
+      params.uid,
     );
   }
 }
 
 class SaveSelectedCurrencyParams {
   final Currency selectedCurrency;
+  final String uid;
 
-  SaveSelectedCurrencyParams(
-    this.selectedCurrency,
-  );
+  SaveSelectedCurrencyParams({
+    required this.uid,
+    required this.selectedCurrency,
+  });
 }

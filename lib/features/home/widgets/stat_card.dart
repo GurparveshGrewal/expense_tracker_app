@@ -1,3 +1,5 @@
+import 'package:expense_tracker_app/core/utils/enums.dart';
+import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/income_entity.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:expense_tracker_app/features/home/widgets/add_income_widget.dart';
@@ -10,9 +12,11 @@ class StatsCard extends StatelessWidget {
   final double expensesAmount;
   final double income;
   final String uid;
+  final Currency currency;
 
   const StatsCard(
-      {required this.uid,
+      {required this.currency,
+      required this.uid,
       required this.expensesAmount,
       required this.income,
       super.key});
@@ -48,7 +52,9 @@ class StatsCard extends StatelessWidget {
             height: 10,
           ),
           Text(
-            income > 0 ? '\$${(income - expensesAmount).toString()}' : "\$0.0",
+            income > 0
+                ? '${getTextForCurrency(currency)}${(income - expensesAmount).toString()}'
+                : "${getTextForCurrency(currency)}0.0",
             style: const TextStyle(
                 color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
           ),
@@ -115,7 +121,7 @@ class StatsCard extends StatelessWidget {
                                 fontSize: 18),
                           ),
                           Text(
-                            '\$${income.toString()}',
+                            '${getTextForCurrency(currency)}${income.toString()}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -158,7 +164,7 @@ class StatsCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '\$${expensesAmount.toString()}',
+                          '${getTextForCurrency(currency)}${expensesAmount.toString()}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

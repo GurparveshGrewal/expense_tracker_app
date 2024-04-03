@@ -21,8 +21,10 @@ class HomeInitializedState extends HomeState {
   final List<ExpenseEntity> expenses;
   final List<IncomeEntity> incomes;
   final bool showAddIncomeDialog;
+  final Currency currency;
 
   HomeInitializedState({
+    required this.currency,
     required this.expenses,
     required this.incomes,
     required this.showAddIncomeDialog,
@@ -35,6 +37,7 @@ class HomeInitializedState extends HomeState {
     bool? showIncomeDialog,
   }) {
     return HomeInitializedState(
+      currency: prevState.currency,
       expenses: expenses ?? prevState.expenses,
       incomes: incomes ?? prevState.incomes,
       showAddIncomeDialog: showIncomeDialog ?? prevState.showAddIncomeDialog,

@@ -48,7 +48,6 @@ class _MainScreenState extends State<MainScreen> {
             },
             positiveCallBack: Navigator.of(context).pop,
           );
-          _incomeTextController.dispose();
         });
       });
     }
@@ -123,6 +122,7 @@ class _MainScreenState extends State<MainScreen> {
               height: 20,
             ),
             StatsCard(
+              currency: widget.initializedState.currency,
               uid: widget.currentUser.uid,
               income: _getTotalIncome(widget.initializedState.incomes),
               expensesAmount:
@@ -159,6 +159,7 @@ class _MainScreenState extends State<MainScreen> {
                   itemCount: widget.initializedState.expenses.length,
                   itemBuilder: (context, index) {
                     return ExpenseCard(
+                      currency: widget.initializedState.currency,
                       expense: widget.initializedState.expenses[index],
                       icon: _getIcon(widget
                           .initializedState.expenses[index].expenseCategory),

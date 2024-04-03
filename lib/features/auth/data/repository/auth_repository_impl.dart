@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/core/repository/shared_preferences_reposity.dart';
 import 'package:expense_tracker_app/core/wrappers/firebase_auth_wrapper.dart';
 import 'package:expense_tracker_app/core/wrappers/firestore_database_wrapper.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
@@ -6,9 +7,11 @@ import 'package:expense_tracker_app/features/auth/domain/repository/auth_reposit
 class AuthRepositoryImpl extends AuthRepository {
   final FirebaseAuthWrapper _firebaseAuthWrapper;
   final FirestoreDatabaseWrapper _firestoreDatabaseWrapper;
+  final SharedPreferencesRepository _sharedPreferencesRepository;
   AuthRepositoryImpl(
     this._firebaseAuthWrapper,
     this._firestoreDatabaseWrapper,
+    this._sharedPreferencesRepository,
   );
 
   @override
@@ -106,5 +109,10 @@ class AuthRepositoryImpl extends AuthRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<void> clearSharedPrefs() async {
+    await _sharedPreferencesRepository.clearSharedPrefs();
   }
 }

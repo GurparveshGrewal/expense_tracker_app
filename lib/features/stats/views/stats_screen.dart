@@ -1,4 +1,5 @@
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
+import 'package:expense_tracker_app/core/utils/enums.dart';
 import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
@@ -113,6 +114,7 @@ class _StatsPageState extends State<StatsPage> {
                         itemCount: state.expenses.length,
                         itemBuilder: (context, index) {
                           return ExpenseCard(
+                            currency: Currency.cad,
                             expense: state.expenses[index],
                             icon: Icons.food_bank_outlined,
                             backgroundColor: index % 2 == 0

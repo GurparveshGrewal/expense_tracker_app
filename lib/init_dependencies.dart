@@ -5,6 +5,7 @@ import 'package:expense_tracker_app/core/wrappers/firestore_database_wrapper.dar
 import 'package:expense_tracker_app/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:expense_tracker_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/check_current_user_usecase.dart';
+import 'package:expense_tracker_app/features/auth/domain/usecases/clear_shared_prefs_usecase.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/sign_out.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_email_password%20.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_google.dart';
@@ -43,6 +44,7 @@ void _initAuth() {
   serviceLocator.registerFactory<AuthRepository>(() => AuthRepositoryImpl(
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       ));
 
   // Usecases
@@ -55,9 +57,13 @@ void _initAuth() {
   serviceLocator.registerFactory(() => SignOutUsecase(serviceLocator()));
   serviceLocator
       .registerFactory(() => CheckCurrentUserUsecase(serviceLocator()));
+  serviceLocator.registerFactory(() => ClearSharedPrefsUsecase(
+        serviceLocator(),
+      ));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc(
+      clearSharedPrefsUsecase: serviceLocator(),
       signInWithEmailAndPasswordUsecase: serviceLocator(),
       signUpWithEmailAndPasswordUsecase: serviceLocator(),
       signOutUsecase: serviceLocator(),
@@ -90,6 +96,7 @@ void _initHome() {
 
   // Blocs
   serviceLocator.registerLazySingleton(() => HomeBloc(
+        sharedPreferencesRepository: serviceLocator(),
         getSavedCurrencyUsecase: serviceLocator(),
         saveSelectedCurrencyUsecase: serviceLocator(),
         addExpenseToDatabaseUsecase: serviceLocator(),

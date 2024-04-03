@@ -16,4 +16,6 @@ abstract class AuthRepository {
   Future<MyUser> signInWithGoogle();
 
   Future<MyUser> getCurrentUser();
+
+  Future<void> clearSharedPrefs();
 }
