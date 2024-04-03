@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:expense_tracker_app/app_view.dart';
@@ -18,7 +19,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthBloc>().add(AuthCheckIfUserLoggendIn());
+    Timer(const Duration(seconds: 1), () {
+      context.read<AuthBloc>().add(AuthCheckIfUserLoggendIn());
+    });
   }
 
   @override

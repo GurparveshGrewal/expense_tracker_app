@@ -1,4 +1,6 @@
 import 'package:expense_tracker_app/core/repository/shared_preferences_reposity.dart';
+import 'package:expense_tracker_app/core/utils/enums.dart';
+import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/core/wrappers/firebase_auth_wrapper.dart';
 import 'package:expense_tracker_app/core/wrappers/firestore_database_wrapper.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
@@ -51,6 +53,10 @@ class AuthRepositoryImpl extends AuthRepository {
         final rawData =
             await _firestoreDatabaseWrapper.getUserData(uid: user.uid);
 
+        if (rawData['currency'] != null) {
+          await _saveCurrencyInPrefs(rawData['currency']);
+        }
+
         return MyUser(
             uid: user.uid, fullName: rawData['fullName'], email: email);
       }
@@ -71,14 +77,14 @@ class AuthRepositoryImpl extends AuthRepository {
             await _firestoreDatabaseWrapper.getUserData(uid: currentUser.uid);
 
         if (userData['currency'] != null) {
-          await _sharedPreferencesRepository.saveCurrency(userData['currency']);
+          await _saveCurrencyInPrefs(userData['currency']);
         }
 
         return MyUser(
           uid: currentUser.uid,
           fullName: userData['fullName'] ?? "fullName",
           email: currentUser.email!,
-          currency: userData['currency'],
+          currency: convertStringToEnum(Currency.values, userData['currency']),
         );
       }
 
@@ -121,5 +127,9 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<void> clearSharedPrefs() async {
     await _sharedPreferencesRepository.clearSharedPrefs();
+  }
+
+  Future<void> _saveCurrencyInPrefs(String currency) async {
+    await _sharedPreferencesRepository.saveCurrency(currency);
   }
 }

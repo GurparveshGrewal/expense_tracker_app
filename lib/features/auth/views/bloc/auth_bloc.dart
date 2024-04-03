@@ -41,7 +41,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _clearSharedPrefsUsecase = clearSharedPrefsUsecase,
         super(AuthInitialState()) {
     on<AuthEvent>((event, emit) {
-      if (event is AuthSignOutEvent) {
+      if (event is AuthSignOutEvent || event is AuthCheckIfUserLoggendIn) {
       } else {
         emit(AuthLoadingState());
       }
@@ -60,7 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (currentUser.uid != '') {
       _emitAuthSuccess(currentUser, emit);
     } else {
-      emit(AuthUserLogInFailedState());
+      _authCubit.updateUser(currentUser);
     }
   }
 
