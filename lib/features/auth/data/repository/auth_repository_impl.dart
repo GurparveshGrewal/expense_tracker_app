@@ -69,10 +69,17 @@ class AuthRepositoryImpl extends AuthRepository {
       if (currentUser != null) {
         final userData =
             await _firestoreDatabaseWrapper.getUserData(uid: currentUser.uid);
+
+        if (userData['currency'] != null) {
+          await _sharedPreferencesRepository.saveCurrency(userData['currency']);
+        }
+
         return MyUser(
-            uid: currentUser.uid,
-            fullName: userData['fullName'] ?? "fullName",
-            email: currentUser.email!);
+          uid: currentUser.uid,
+          fullName: userData['fullName'] ?? "fullName",
+          email: currentUser.email!,
+          currency: userData['currency'],
+        );
       }
 
       return MyUser.empty;

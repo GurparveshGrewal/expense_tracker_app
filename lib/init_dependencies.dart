@@ -106,5 +106,6 @@ void _initHome() {
       ));
   serviceLocator.registerLazySingleton(() => StatsBloc(
         filteredExpenseUsercase: serviceLocator(),
+        getSavedCurrencyUsecase: serviceLocator(),
       ));
 }
