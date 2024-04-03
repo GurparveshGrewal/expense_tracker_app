@@ -46,3 +46,23 @@ IconData getIconForCurrency(Currency userCurrency) {
       return FontAwesomeIcons.exclamation;
   }
 }
+
+IconData getIconForExpenseCategory(ExpenseCategory category) {
+  switch (category) {
+    case ExpenseCategory.education:
+      return FontAwesomeIcons.bookAtlas;
+    case ExpenseCategory.entertainment:
+      return FontAwesomeIcons.video;
+    case ExpenseCategory.food:
+      return FontAwesomeIcons.burger;
+    case ExpenseCategory.grocery:
+      return FontAwesomeIcons.kitchenSet;
+    case ExpenseCategory.travel:
+      return FontAwesomeIcons.car;
+    case ExpenseCategory.misc:
+      return Icons.extension_sharp;
+
+    default:
+      return Icons.abc;
+  }
+}

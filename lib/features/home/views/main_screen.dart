@@ -1,17 +1,17 @@
 import 'package:expense_tracker_app/core/commons/widgets/double_action_alert_dialog.dart';
-import 'package:expense_tracker_app/core/utils/enums.dart';
+import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/income_entity.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
+import 'package:expense_tracker_app/features/home/views/see_all_expenses_page.dart';
 import 'package:expense_tracker_app/features/home/widgets/add_income_widget.dart';
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
 import 'package:expense_tracker_app/features/home/widgets/stat_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainScreen extends StatefulWidget {
   final MyUser currentUser;
@@ -154,7 +154,13 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 const Spacer(),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => SeeAllExpensesPage(
+                              currency: widget.initializedState.currency,
+                              expenses: widget.initializedState.expenses,
+                            )));
+                  },
                   style: TextButton.styleFrom(foregroundColor: Colors.grey),
                   child: const Text(
                     "See All",
@@ -173,7 +179,7 @@ class _MainScreenState extends State<MainScreen> {
                     return ExpenseCard(
                       currency: widget.initializedState.currency,
                       expense: widget.initializedState.expenses[index],
-                      icon: _getIcon(widget
+                      icon: getIconForExpenseCategory(widget
                           .initializedState.expenses[index].expenseCategory),
                       backgroundColor: index % 2 == 0
                           ? Theme.of(context).colorScheme.secondary
@@ -185,26 +191,6 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
-  }
-
-  IconData _getIcon(ExpenseCategory category) {
-    switch (category) {
-      case ExpenseCategory.education:
-        return FontAwesomeIcons.bookAtlas;
-      case ExpenseCategory.entertainment:
-        return FontAwesomeIcons.video;
-      case ExpenseCategory.food:
-        return FontAwesomeIcons.burger;
-      case ExpenseCategory.grocery:
-        return FontAwesomeIcons.kitchenSet;
-      case ExpenseCategory.travel:
-        return FontAwesomeIcons.car;
-      case ExpenseCategory.misc:
-        return Icons.extension_sharp;
-
-      default:
-        return Icons.abc;
-    }
   }
 
   double _getTotalExpenses(List<ExpenseEntity> transactions) {
