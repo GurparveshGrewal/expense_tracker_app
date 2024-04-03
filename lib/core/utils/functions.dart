@@ -1,3 +1,6 @@
+import 'package:expense_tracker_app/core/utils/enums.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 String enumValueToString(Object? enumValue) =>
@@ -12,4 +15,34 @@ T convertStringToEnum<T>(Iterable<T> values, String? value) =>
 
 String convertDateToReadable(DateTime timestamp) {
   return DateFormat.yMMMMd().format(timestamp);
+}
+
+String getTextForCurrency(Currency selectedCurrency) {
+  switch (selectedCurrency) {
+    case Currency.cad:
+      return 'CA\$';
+    case Currency.eur:
+      return '€';
+    case Currency.inr:
+      return '₹';
+    case Currency.usd:
+      return '\$';
+    default:
+      return '?';
+  }
+}
+
+IconData getIconForCurrency(Currency userCurrency) {
+  switch (userCurrency) {
+    case Currency.cad:
+      return FontAwesomeIcons.dollarSign;
+    case Currency.eur:
+      return FontAwesomeIcons.euroSign;
+    case Currency.inr:
+      return FontAwesomeIcons.indianRupeeSign;
+    case Currency.usd:
+      return FontAwesomeIcons.dollarSign;
+    default:
+      return FontAwesomeIcons.exclamation;
+  }
 }

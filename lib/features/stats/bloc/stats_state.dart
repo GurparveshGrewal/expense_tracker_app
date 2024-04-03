@@ -10,12 +10,14 @@ final class StatsInitializedState extends StatsState {
   final DateTime fromDate;
   final DateTime toDate;
   final double income;
+  final Currency currency;
 
   StatsInitializedState({
     required this.expenses,
     required this.fromDate,
     required this.toDate,
     required this.income,
+    required this.currency,
   });
 }
 

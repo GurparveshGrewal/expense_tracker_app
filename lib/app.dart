@@ -1,6 +1,8 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:expense_tracker_app/app_view.dart';
 import 'package:expense_tracker_app/core/commons/cubit/app_user_cubit.dart';
-import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:expense_tracker_app/features/home/views/home_page.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthBloc>().add(AuthCheckIfUserLoggendIn());
+    Timer(const Duration(seconds: 1), () {
+      context.read<AuthBloc>().add(AuthCheckIfUserLoggendIn());
+    });
   }
 
   @override
@@ -31,22 +35,47 @@ class _MyAppState extends State<MyApp> {
               secondary: const Color(0xFFE064F7),
               tertiary: const Color(0xFFFF8D6C),
               outline: Colors.grey)),
-      home: BlocSelector<AppUserCubit, AppUserState, MyUser?>(
-        selector: (state) {
+      home: BlocConsumer<AppUserCubit, AppUserState>(
+        listener: (context, state) {},
+        builder: (context, state) {
           if (state is AppUserLoggedIn) {
-            return state.currentUser;
-          } else {
-            return null;
-          }
-        },
-        builder: (context, currentUser) {
-          if (currentUser != null) {
             return HomePage(
-              myUser: currentUser,
+              myUser: state.currentUser,
             );
-          } else {
+          }
+
+          if (state is AppUserNoLoggedInUser) {
             return const MyAppView();
           }
+
+          return Scaffold(
+            body: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
+                  Theme.of(context).colorScheme.tertiary,
+                ], transform: const GradientRotation(pi / 5))),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'EXPENDS',
+                      style: TextStyle(
+                          letterSpacing: 4,
+                          fontSize: 48,
+                          color: Colors.white,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         },
       ),
     );

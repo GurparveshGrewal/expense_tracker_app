@@ -9,3 +9,5 @@ enum ExpenseCategory {
   maintenance,
   vehicles,
 }
+
+enum Currency { inr, cad, usd, eur }

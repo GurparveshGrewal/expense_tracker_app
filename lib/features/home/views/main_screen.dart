@@ -25,8 +25,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final TextEditingController _incomeTextController = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     if (widget.initializedState.showAddIncomeDialog) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         doubleActionAlertDialog(context,
@@ -44,14 +46,23 @@ class _MainScreenState extends State<MainScreen> {
             positiveButtonTitle: "Add Income",
             negativeCallBack: () {
               Navigator.of(context).pop();
-              _incomeTextController.dispose();
+              _incomeTextController.clear();
             },
             positiveCallBack: Navigator.of(context).pop,
           );
-          _incomeTextController.dispose();
         });
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _incomeTextController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
@@ -123,6 +134,7 @@ class _MainScreenState extends State<MainScreen> {
               height: 20,
             ),
             StatsCard(
+              currency: widget.initializedState.currency,
               uid: widget.currentUser.uid,
               income: _getTotalIncome(widget.initializedState.incomes),
               expensesAmount:
@@ -159,6 +171,7 @@ class _MainScreenState extends State<MainScreen> {
                   itemCount: widget.initializedState.expenses.length,
                   itemBuilder: (context, index) {
                     return ExpenseCard(
+                      currency: widget.initializedState.currency,
                       expense: widget.initializedState.expenses[index],
                       icon: _getIcon(widget
                           .initializedState.expenses[index].expenseCategory),

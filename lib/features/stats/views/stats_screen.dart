@@ -96,7 +96,7 @@ class _StatsPageState extends State<StatsPage> {
                               fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          '\$${_getTotalAmountForTheWeek(state.expenses).toString()}/-',
+                          '${getTextForCurrency(state.currency)}${_getTotalAmountForTheWeek(state.expenses).toString()}/-',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: 16,
@@ -113,6 +113,7 @@ class _StatsPageState extends State<StatsPage> {
                         itemCount: state.expenses.length,
                         itemBuilder: (context, index) {
                           return ExpenseCard(
+                            currency: state.currency,
                             expense: state.expenses[index],
                             icon: Icons.food_bank_outlined,
                             backgroundColor: index % 2 == 0

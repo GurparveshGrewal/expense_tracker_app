@@ -1,7 +1,15 @@
+import 'package:expense_tracker_app/core/utils/enums.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/income_entity.dart';
 
 abstract class HomeRepository {
+  Future<String?> checkSelectedCurrency();
+
+  Future<void> saveSelectedCurrency(
+    Currency selectedCurrency,
+    String uid,
+  );
+
   Future<void> addExpenseToDatabase({
     required ExpenseEntity expense,
   });

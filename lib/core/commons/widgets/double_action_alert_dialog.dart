@@ -39,6 +39,7 @@ void doubleActionAlertDialog(
                         ))),
                 Expanded(
                     child: CommonGradientButton(
+                        disabled: false,
                         buttonTitle: positiveButtonTitle,
                         onTap: positiveCallBack)),
               ],
