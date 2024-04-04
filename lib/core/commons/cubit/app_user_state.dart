@@ -10,7 +10,11 @@ final class AppUserLoggedIn extends AppUserState {
   AppUserLoggedIn(this.currentUser);
 }
 
-final class AppUserNoLoggedInUser extends AppUserState {}
+final class AppUserNoLoggedInUser extends AppUserState {
+  final String? errorMessage;
+
+  AppUserNoLoggedInUser(this.errorMessage);
+}
 
 final class AppUserLoggedOut extends AppUserState {
   AppUserLoggedOut();

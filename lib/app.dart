@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:expense_tracker_app/app_view.dart';
 import 'package:expense_tracker_app/core/commons/cubit/app_user_cubit.dart';
+import 'package:expense_tracker_app/core/utils/show_snackbar.dart';
 import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:expense_tracker_app/features/home/views/home_page.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,13 @@ class _MyAppState extends State<MyApp> {
               tertiary: const Color(0xFFFF8D6C),
               outline: Colors.grey)),
       home: BlocConsumer<AppUserCubit, AppUserState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is AppUserNoLoggedInUser) {
+            if (state.errorMessage != null) {
+              showSnackBar(context, state.errorMessage!);
+            }
+          }
+        },
         builder: (context, state) {
           if (state is AppUserLoggedIn) {
             return HomePage(

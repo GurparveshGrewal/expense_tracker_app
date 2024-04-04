@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expense_tracker_app/core/commons/exceptions/failure_exceptions.dart';
 
 class FirestoreDatabaseWrapper {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -26,8 +27,10 @@ class FirestoreDatabaseWrapper {
           .doc(uid)
           .get();
       return response.data()!;
+    } on FirebaseException catch (error) {
+      throw FirestoreDatabaseFailure(error.code);
     } catch (e) {
-      rethrow;
+      throw FirestoreDatabaseFailure('No user found for given credentials');
     }
   }
 

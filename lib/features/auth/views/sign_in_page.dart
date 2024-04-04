@@ -16,6 +16,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
 
@@ -26,16 +27,15 @@ class _SignInPageState extends State<SignInPage> {
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            if (state is AuthUserLogInSuccessState) {
-              showSnackBar(context, "Auth Success");
-            } else if (state is AuthUserLogInFailedState) {
-              showSnackBar(context, "Auth Failed");
+            if (state is AuthUserLogInFailedState) {
+              showSnackBar(context, state.errorMessage);
             }
           },
           builder: (context, state) {
             if (state is AuthLoadingState) return const Loader();
 
             return Form(
+              key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -61,9 +61,11 @@ class _SignInPageState extends State<SignInPage> {
                       disabled: false,
                       buttonTitle: "SIGN IN",
                       onTap: () {
-                        context.read<AuthBloc>().add(AuthSignInProcessEvent(
-                            email: emailTextController.text.trim(),
-                            password: passwordTextController.text.trim()));
+                        if (_formKey.currentState!.validate()) {
+                          context.read<AuthBloc>().add(AuthSignInProcessEvent(
+                              email: emailTextController.text.trim(),
+                              password: passwordTextController.text.trim()));
+                        }
                       }),
                   const SizedBox(
                     height: 20,
