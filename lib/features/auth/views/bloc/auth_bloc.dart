@@ -84,12 +84,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       _emitAuthSuccess(user, emit);
     } on AuthFailure catch (failure) {
-      if (failure.message == 'invalid-credential') {
-        emit(AuthUserLogInFailedState('Invalid email or passrord!'));
-      } else if (failure.message == 'too-many-requests') {
-        emit(AuthUserLogInFailedState(
-            'You are making too many requests.\ntry again after some time.'));
-      }
+      _emitAuthFailure(
+          _getAuthFailureStateMessageFromCode(failure.message), emit);
     }
   }
 
@@ -105,15 +101,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       _emitAuthSuccess(user, emit);
     } on AuthFailure catch (failure) {
-      if (failure.message == 'email-already-in-use') {
-        emit(AuthUserLogInFailedState(
-            'Email already registerd, signin directly.'));
-      }
+      _emitAuthFailure(
+          _getAuthFailureStateMessageFromCode(failure.message), emit);
     } on FirestoreDatabaseFailure catch (failure) {
       if (failure.message == 'unavailable') {
-        emit(AuthUserLogInFailedState('No internet connection :('));
+        _emitAuthFailure('No internet connection :(', emit);
       } else {
-        emit(AuthUserLogInFailedState(failure.message));
+        _emitAuthFailure(failure.message, emit);
       }
     }
   }
@@ -134,6 +128,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await _clearSharedPrefsUsecase({});
 
     _authCubit.updateUser(null);
+  }
+
+  String _getAuthFailureStateMessageFromCode(String code) {
+    switch (code) {
+      case 'email-already-in-use':
+        return 'Email already registerd, signin directly.';
+      case 'invalid-credential':
+        return 'Invalid email or passrord!';
+      case 'too-many-requests':
+        return 'You are making too many requests.\ntry again after some time.';
+      default:
+        return 'something went wrong.';
+    }
+  }
+
+  void _emitAuthFailure(String message, Emitter<AuthState> emit) {
+    emit(AuthUserLogInFailedState(message));
   }
 
   void _emitAuthSuccess(MyUser currentUser, Emitter<AuthState> emit) {
