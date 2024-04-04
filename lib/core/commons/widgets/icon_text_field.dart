@@ -7,6 +7,7 @@ class IconTextFieldWidget extends StatelessWidget {
   final TextInputType inputType;
   final bool passwordField;
   final bool allowAmountValueOnly;
+
   const IconTextFieldWidget(
       {required this.controller,
       required this.icon,
@@ -40,6 +41,11 @@ class IconTextFieldWidget extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return "This field can't be empty";
         } else {
+          if (inputType == TextInputType.emailAddress) {
+            if (!value.contains('@') || !value.contains('.com')) {
+              return "Invalid email address.";
+            }
+          }
           if (allowAmountValueOnly) {
             try {
               double.parse(value);

@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'package:expense_tracker_app/core/commons/exceptions/failure_exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthWrapper {
@@ -31,9 +33,11 @@ class FirebaseAuthWrapper {
           email: email, password: password);
 
       return user.user;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
+    } on FirebaseAuthException catch (error) {
+      log(error.toString());
+      throw Failure(error.code);
+    } on PlatformException catch (e) {
+      throw Failure(e.toString());
     }
   }
 

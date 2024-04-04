@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:expense_tracker_app/core/commons/cubit/app_user_cubit.dart';
+import 'package:expense_tracker_app/core/commons/exceptions/failure_exceptions.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/check_current_user_usecase.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/sign_out.dart';
@@ -66,16 +67,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> authSignInProcessEvent(
       AuthSignInProcessEvent event, Emitter<AuthState> emit) async {
-    final user = await _signInWithEmailAndPasswordUsecase(
-        SignInWithEmailAndPasswordUsecaseParams(
-      email: event.email,
-      password: event.password,
-    ));
+    try {
+      final user = await _signInWithEmailAndPasswordUsecase(
+          SignInWithEmailAndPasswordUsecaseParams(
+        email: event.email,
+        password: event.password,
+      ));
 
-    if (user.uid == '') {
-      emit(AuthUserLogInFailedState());
-    } else {
       _emitAuthSuccess(user, emit);
+    } on Failure catch (error) {
+      if (error.message == 'invalid-credential') {
+        emit(AuthUserLogInFailedState('Invalid email or passrord!'));
+      } else if (error.message == 'too-many-requests') {
+        emit(AuthUserLogInFailedState(
+            'You are making too many requests.\ntry again after some time.'));
+      }
     }
   }
 
@@ -89,7 +95,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ));
 
     if (user.uid == '') {
-      emit(AuthUserLogInFailedState());
+      emit(AuthUserLogInFailedState(''));
     } else {
       _emitAuthSuccess(user, emit);
     }
@@ -101,7 +107,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (user.uid != '') {
       _emitAuthSuccess(user, emit);
     } else {
-      emit(AuthUserLogInFailedState());
+      emit(AuthUserLogInFailedState(''));
     }
   }
 
