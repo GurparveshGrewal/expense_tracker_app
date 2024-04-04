@@ -8,11 +8,11 @@ class AppUserCubit extends Cubit<AppUserState> {
   AppUserCubit() : super(AppUserInitial());
 
   void updateUser(
-    MyUser? currentUser, {
-    bool isAnError = false,
-  }) {
+    MyUser? currentUser,
+    String? errorMessage,
+  ) {
     if (currentUser == null || currentUser.uid == '') {
-      emit(AppUserNoLoggedInUser(isAnError ? 'No user found :(' : null));
+      emit(AppUserNoLoggedInUser(errorMessage));
     } else {
       emit(AppUserLoggedIn(currentUser));
     }

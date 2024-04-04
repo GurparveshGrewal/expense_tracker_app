@@ -62,14 +62,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (currentUser.uid != '') {
         _emitAuthSuccess(currentUser, emit);
       } else {
-        _authCubit.updateUser(currentUser);
+        _authCubit.updateUser(currentUser, null);
       }
     } on FirestoreDatabaseFailure catch (failure) {
-      if (failure.message == 'unavailable') {
-        emit(AuthUserLogInFailedState('No internet connection :('));
-      } else {
-        _authCubit.updateUser(null, isAnError: true);
-      }
+      _authCubit.updateUser(null, failure.message);
     }
   }
 
@@ -104,11 +100,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _emitAuthFailure(
           _getAuthFailureStateMessageFromCode(failure.message), emit);
     } on FirestoreDatabaseFailure catch (failure) {
-      if (failure.message == 'unavailable') {
-        _emitAuthFailure('No internet connection :(', emit);
-      } else {
-        _emitAuthFailure(failure.message, emit);
-      }
+      _emitAuthFailure(
+          _getAuthFailureStateMessageFromFirestoreExceptionCode(
+              failure.message),
+          emit);
     }
   }
 
@@ -127,7 +122,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await _signOutUsecase({});
     await _clearSharedPrefsUsecase({});
 
-    _authCubit.updateUser(null);
+    _authCubit.updateUser(null, null);
   }
 
   String _getAuthFailureStateMessageFromCode(String code) {
@@ -143,12 +138,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  String _getAuthFailureStateMessageFromFirestoreExceptionCode(String code) {
+    switch (code) {
+      case 'unavailable':
+        return 'No internet connection :(';
+      default:
+        return 'something went wrong.';
+    }
+  }
+
   void _emitAuthFailure(String message, Emitter<AuthState> emit) {
     emit(AuthUserLogInFailedState(message));
   }
 
   void _emitAuthSuccess(MyUser currentUser, Emitter<AuthState> emit) {
-    _authCubit.updateUser(currentUser);
+    _authCubit.updateUser(currentUser, null);
     emit(AuthUserLogInSuccessState(
       currentUser: currentUser,
     ));
