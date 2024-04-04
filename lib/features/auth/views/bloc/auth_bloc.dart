@@ -56,12 +56,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> authCheckIfUserLoggendIn(
       AuthCheckIfUserLoggendIn event, Emitter<AuthState> emit) async {
-    final currentUser = await _checkCurrentUserUsecase({});
+    try {
+      final currentUser = await _checkCurrentUserUsecase({});
 
-    if (currentUser.uid != '') {
-      _emitAuthSuccess(currentUser, emit);
-    } else {
-      _authCubit.updateUser(currentUser);
+      if (currentUser.uid != '') {
+        _emitAuthSuccess(currentUser, emit);
+      } else {
+        _authCubit.updateUser(currentUser);
+      }
+    } on FirestoreDatabaseFailure catch (failure) {
+      if (failure.message == 'unavailable') {
+        emit(AuthUserLogInFailedState('No internet connection :('));
+      } else {
+        _authCubit.updateUser(null, isAnError: true);
+      }
     }
   }
 
@@ -75,10 +83,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ));
 
       _emitAuthSuccess(user, emit);
-    } on Failure catch (error) {
-      if (error.message == 'invalid-credential') {
+    } on AuthFailure catch (failure) {
+      if (failure.message == 'invalid-credential') {
         emit(AuthUserLogInFailedState('Invalid email or passrord!'));
-      } else if (error.message == 'too-many-requests') {
+      } else if (failure.message == 'too-many-requests') {
         emit(AuthUserLogInFailedState(
             'You are making too many requests.\ntry again after some time.'));
       }
@@ -87,17 +95,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> authSignUpProcessEvent(
       AuthSignUpProcessEvent event, Emitter<AuthState> emit) async {
-    final user = await _signUpWithEmailAndPasswordUsecase(
-        SignupWithEmailAndPasswordUsecaseParams(
-      name: event.fullName,
-      email: event.email,
-      password: event.password,
-    ));
+    try {
+      final user = await _signUpWithEmailAndPasswordUsecase(
+          SignupWithEmailAndPasswordUsecaseParams(
+        name: event.fullName,
+        email: event.email,
+        password: event.password,
+      ));
 
-    if (user.uid == '') {
-      emit(AuthUserLogInFailedState(''));
-    } else {
       _emitAuthSuccess(user, emit);
+    } on AuthFailure catch (failure) {
+      if (failure.message == 'email-already-in-use') {
+        emit(AuthUserLogInFailedState(
+            'Email already registerd, signin directly.'));
+      }
+    } on FirestoreDatabaseFailure catch (failure) {
+      if (failure.message == 'unavailable') {
+        emit(AuthUserLogInFailedState('No internet connection :('));
+      } else {
+        emit(AuthUserLogInFailedState(failure.message));
+      }
     }
   }
 

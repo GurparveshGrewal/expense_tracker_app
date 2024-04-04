@@ -1,5 +1,11 @@
-class Failure {
+class AuthFailure {
   final String message;
 
-  Failure(this.message);
+  AuthFailure(this.message);
+}
+
+class FirestoreDatabaseFailure {
+  final String message;
+
+  FirestoreDatabaseFailure(this.message);
 }

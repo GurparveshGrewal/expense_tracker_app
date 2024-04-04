@@ -7,9 +7,12 @@ part 'app_user_state.dart';
 class AppUserCubit extends Cubit<AppUserState> {
   AppUserCubit() : super(AppUserInitial());
 
-  void updateUser(MyUser? currentUser) {
+  void updateUser(
+    MyUser? currentUser, {
+    bool isAnError = false,
+  }) {
     if (currentUser == null || currentUser.uid == '') {
-      emit(AppUserNoLoggedInUser());
+      emit(AppUserNoLoggedInUser(isAnError ? 'No user found :(' : null));
     } else {
       emit(AppUserLoggedIn(currentUser));
     }

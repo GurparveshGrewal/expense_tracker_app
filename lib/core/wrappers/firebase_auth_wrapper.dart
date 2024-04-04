@@ -18,9 +18,11 @@ class FirebaseAuthWrapper {
           email: email, password: password);
 
       return user.user;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
+    } on FirebaseAuthException catch (error) {
+      log(error.toString());
+      throw AuthFailure(error.code);
+    } on PlatformException catch (e) {
+      throw AuthFailure(e.toString());
     }
   }
 
@@ -35,9 +37,9 @@ class FirebaseAuthWrapper {
       return user.user;
     } on FirebaseAuthException catch (error) {
       log(error.toString());
-      throw Failure(error.code);
+      throw AuthFailure(error.code);
     } on PlatformException catch (e) {
-      throw Failure(e.toString());
+      throw AuthFailure(e.toString());
     }
   }
 

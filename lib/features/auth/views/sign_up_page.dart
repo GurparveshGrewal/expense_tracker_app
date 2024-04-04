@@ -15,6 +15,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
   final TextEditingController fullNameTextController = TextEditingController();
@@ -27,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
           if (state is AuthUserLogInSuccessState) {
             showSnackBar(context, "Auth Success");
           } else if (state is AuthUserLogInFailedState) {
-            showSnackBar(context, "Auth Failed");
+            showSnackBar(context, state.errorMessage);
           }
         },
         builder: (context, state) {
@@ -38,6 +39,7 @@ class _SignUpPageState extends State<SignUpPage> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: Form(
+              key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -71,10 +73,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       disabled: false,
                       buttonTitle: "SIGN UP",
                       onTap: () {
-                        context.read<AuthBloc>().add(AuthSignUpProcessEvent(
-                            email: emailTextController.text.trim(),
-                            password: passwordTextController.text.trim(),
-                            fullName: fullNameTextController.text.trim()));
+                        if (_formKey.currentState!.validate()) {
+                          context.read<AuthBloc>().add(AuthSignUpProcessEvent(
+                              email: emailTextController.text.trim(),
+                              password: passwordTextController.text.trim(),
+                              fullName: fullNameTextController.text.trim()));
+                        }
                       }),
                 ],
               ),
