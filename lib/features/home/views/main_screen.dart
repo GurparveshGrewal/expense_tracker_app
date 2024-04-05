@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:expense_tracker_app/core/commons/widgets/double_action_alert_dialog.dart';
 import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
@@ -64,6 +66,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Random random = Random();
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
@@ -186,21 +189,14 @@ class _MainScreenState extends State<MainScreen> {
               child: ListView.builder(
                   itemCount: widget.initializedState.expenses.length,
                   itemBuilder: (context, index) {
-                    Color backgroundColor = Colors.black;
-                    if (index < 4) {
-                      backgroundColor = _getColor(index);
-                    } else {
-                      int colorIndex = index ~/ 4 % cardColors.length;
-                      // Use the color from the list based on the color index
-                      backgroundColor = _getColor(colorIndex);
-                    }
+                    int randomIndex = random.nextInt(4);
 
                     return ExpenseCard(
                       currency: widget.initializedState.currency,
                       expense: widget.initializedState.expenses[index],
                       icon: getIconForExpenseCategory(widget
                           .initializedState.expenses[index].expenseCategory),
-                      backgroundColor: backgroundColor,
+                      backgroundColor: _getColor(randomIndex),
                     );
                   }),
             )
@@ -215,7 +211,7 @@ class _MainScreenState extends State<MainScreen> {
       Theme.of(context).colorScheme.primary,
       Theme.of(context).colorScheme.secondary,
       Theme.of(context).colorScheme.tertiary,
-      Theme.of(context).colorScheme.error,
+      Theme.of(context).colorScheme.error.withOpacity(0.75),
     ];
 
     return cardColors[index];
