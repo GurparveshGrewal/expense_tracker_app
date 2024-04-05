@@ -29,7 +29,6 @@ class StatsCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.amber,
         gradient: LinearGradient(
           colors: [
             Theme.of(context).colorScheme.primary,
@@ -49,19 +48,23 @@ class StatsCard extends StatelessWidget {
             child: FittedBox(
               child: Column(
                 children: [
-                  const Text(
-                    "Total Balance",
+                  Text(
+                    (income - expensesAmount) <= 0
+                        ? 'No Balance'
+                        : "Total Balance",
                     style: TextStyle(
-                        color: Colors.white,
+                        color: (income - expensesAmount) <= 0
+                            ? Colors.red.withOpacity(0.9)
+                            : Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    income > 0
-                        ? '${getTextForCurrency(currency)}${(income - expensesAmount).toString()}'
-                        : "${getTextForCurrency(currency)}0.0",
-                    style: const TextStyle(
-                        color: Colors.white,
+                    '${getTextForCurrency(currency)}${(income - expensesAmount).toString()}',
+                    style: TextStyle(
+                        color: (income - expensesAmount) <= 0
+                            ? Colors.red.withOpacity(0.9)
+                            : Colors.white,
                         fontSize: 30,
                         fontWeight: FontWeight.bold),
                   ),
