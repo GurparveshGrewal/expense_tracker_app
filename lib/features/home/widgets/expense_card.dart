@@ -8,6 +8,7 @@ class ExpenseCard extends StatefulWidget {
   final Color backgroundColor;
   final IconData icon;
   final Currency currency;
+
   const ExpenseCard(
       {required this.expense,
       required this.backgroundColor,
@@ -44,31 +45,39 @@ class _ExpenseCardState extends State<ExpenseCard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                                color: widget.backgroundColor,
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Icon(
-                              widget.icon,
-                              size: 30,
-                              color: Colors.white,
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: widget.backgroundColor,
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: Icon(
+                                    widget.icon,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    widget.expense.note,
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          Flexible(
-                            flex: 5,
-                            child: Text(
-                              widget.expense.note,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const Spacer(),
                           FittedBox(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +131,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                                   child: Text(
                                     widget.expense.note,
                                     style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w500),
                                   ),
                                 ),

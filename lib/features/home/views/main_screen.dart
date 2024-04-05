@@ -25,6 +25,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final TextEditingController _incomeTextController = TextEditingController();
+  List<Color> cardColors = [];
 
   @override
   void initState() {
@@ -185,14 +186,21 @@ class _MainScreenState extends State<MainScreen> {
               child: ListView.builder(
                   itemCount: widget.initializedState.expenses.length,
                   itemBuilder: (context, index) {
+                    Color backgroundColor = Colors.black;
+                    if (index < 4) {
+                      backgroundColor = _getColor(index);
+                    } else {
+                      int colorIndex = index ~/ 4 % cardColors.length;
+                      // Use the color from the list based on the color index
+                      backgroundColor = _getColor(colorIndex);
+                    }
+
                     return ExpenseCard(
                       currency: widget.initializedState.currency,
                       expense: widget.initializedState.expenses[index],
                       icon: getIconForExpenseCategory(widget
                           .initializedState.expenses[index].expenseCategory),
-                      backgroundColor: index % 2 == 0
-                          ? Theme.of(context).colorScheme.secondary
-                          : Theme.of(context).colorScheme.primary,
+                      backgroundColor: backgroundColor,
                     );
                   }),
             )
@@ -200,6 +208,17 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  Color _getColor(int index) {
+    List<Color> cardColors = [
+      Theme.of(context).colorScheme.primary,
+      Theme.of(context).colorScheme.secondary,
+      Theme.of(context).colorScheme.tertiary,
+      Theme.of(context).colorScheme.error,
+    ];
+
+    return cardColors[index];
   }
 
   double _getTotalExpenses(List<ExpenseEntity> transactions) {
