@@ -133,6 +133,9 @@ class _MainScreenState extends State<MainScreen> {
                           positiveCallBack: () {
                             Navigator.of(context).pop();
                             context.read<AuthBloc>().add(AuthSignOutEvent());
+                            context
+                                .read<HomeBloc>()
+                                .add(HomeClearCacheAndPrefsEvent());
                           },
                         );
                       },

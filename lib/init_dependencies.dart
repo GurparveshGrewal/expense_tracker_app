@@ -5,7 +5,6 @@ import 'package:expense_tracker_app/core/wrappers/firestore_database_wrapper.dar
 import 'package:expense_tracker_app/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:expense_tracker_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/check_current_user_usecase.dart';
-import 'package:expense_tracker_app/features/auth/domain/usecases/clear_shared_prefs_usecase.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/sign_out.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_email_password%20.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_google.dart';
@@ -15,6 +14,7 @@ import 'package:expense_tracker_app/features/home/data/repository/home_repositor
 import 'package:expense_tracker_app/features/home/domain/repository/home_repository.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/add_expense_to_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/add_income_to_database.dart';
+import 'package:expense_tracker_app/features/home/domain/usecases/clear_cache_and_prefs.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_expenses_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_filtered_expenses.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_incomes_from_database.dart';
@@ -57,13 +57,9 @@ void _initAuth() {
   serviceLocator.registerFactory(() => SignOutUsecase(serviceLocator()));
   serviceLocator
       .registerFactory(() => CheckCurrentUserUsecase(serviceLocator()));
-  serviceLocator.registerFactory(() => ClearSharedPrefsUsecase(
-        serviceLocator(),
-      ));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc(
-      clearSharedPrefsUsecase: serviceLocator(),
       signInWithEmailAndPasswordUsecase: serviceLocator(),
       signUpWithEmailAndPasswordUsecase: serviceLocator(),
       signOutUsecase: serviceLocator(),
@@ -93,6 +89,8 @@ void _initHome() {
       .registerFactory(() => GetSavedCurrencyUsecase(serviceLocator()));
   serviceLocator
       .registerFactory(() => SaveSelectedCurrencyUsecase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => ClearCacheAndPrefsUsecase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => HomeBloc(
@@ -103,6 +101,7 @@ void _initHome() {
         fetchExpensesFromDatabaseUsecase: serviceLocator(),
         fetchIncomes: serviceLocator(),
         addIncomeToDatabaseUsecase: serviceLocator(),
+        clearCacheAndPrefsUsecase: serviceLocator(),
       ));
   serviceLocator.registerLazySingleton(() => StatsBloc(
         filteredExpenseUsercase: serviceLocator(),

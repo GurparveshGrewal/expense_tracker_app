@@ -131,11 +131,6 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
-  @override
-  Future<void> clearSharedPrefs() async {
-    await _sharedPreferencesRepository.clearSharedPrefs();
-  }
-
   Future<void> _saveCurrencyInPrefs(String currency) async {
     await _sharedPreferencesRepository.saveCurrency(currency);
   }

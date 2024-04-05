@@ -32,4 +32,6 @@ abstract class HomeRepository {
     required DateTime fromDate,
     required DateTime toDate,
   });
+
+  Future<void> clearCacheAndPrefs();
 }
