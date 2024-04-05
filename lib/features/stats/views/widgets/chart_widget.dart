@@ -133,12 +133,10 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
       fontSize: 14,
     );
 
-    String text = value.toInt().toString();
-
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 0,
-      child: Text(text, style: style),
+      child: FittedBox(child: Text(_formatAmount(value), style: style)),
     );
   }
 
@@ -152,5 +150,14 @@ class _MyChartState extends State<MyChart> with SingleTickerProviderStateMixin {
     double maxValue =
         expenses.reduce((value, element) => value > element ? value : element);
     return maxValue;
+  }
+
+  String _formatAmount(double value) {
+    if (value >= 1000) {
+      double newValue = value / 1000;
+      return '${newValue.toStringAsFixed(newValue.truncateToDouble() == newValue ? 0 : 1)}k';
+    } else {
+      return value.toString();
+    }
   }
 }

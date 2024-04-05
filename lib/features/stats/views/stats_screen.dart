@@ -3,7 +3,8 @@ import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.dart';
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
 import 'package:expense_tracker_app/features/stats/bloc/stats_bloc.dart';
-import 'package:expense_tracker_app/features/stats/widgets/chart_widget.dart';
+import 'package:expense_tracker_app/features/stats/views/widgets/chart_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -73,11 +74,13 @@ class _StatsPageState extends State<StatsPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "${convertDateToReadable(widget.fromDate)} - ${convertDateToReadable(widget.toDate)}",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+                  FittedBox(
+                    child: Text(
+                      "${convertDateToReadable(widget.fromDate)} - ${convertDateToReadable(widget.toDate)}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   const SizedBox(
