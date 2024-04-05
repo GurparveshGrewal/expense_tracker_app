@@ -119,14 +119,18 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         tabs: const [
                           Padding(
                             padding: EdgeInsets.all(10),
-                            child: Text(
-                              'Sign In',
+                            child: FittedBox(
+                              child: Text(
+                                'Sign In',
+                              ),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.all(10),
-                            child: Text(
-                              'Sign Up',
+                            child: FittedBox(
+                              child: Text(
+                                'Sign Up',
+                              ),
                             ),
                           )
                         ]),

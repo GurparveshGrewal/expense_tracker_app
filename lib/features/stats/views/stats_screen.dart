@@ -4,7 +4,6 @@ import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.d
 import 'package:expense_tracker_app/features/home/widgets/expense_card.dart';
 import 'package:expense_tracker_app/features/stats/bloc/stats_bloc.dart';
 import 'package:expense_tracker_app/features/stats/views/widgets/chart_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,9 +38,11 @@ class _StatsPageState extends State<StatsPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
         title: const Center(
-          child: Text(
-            "Analyze your Expenses (Weekly)",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          child: FittedBox(
+            child: Text(
+              "Analyze your Expenses (Weekly)",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ),
@@ -56,75 +57,111 @@ class _StatsPageState extends State<StatsPage> {
             return Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-              child: Column(
+              child: Stack(
                 children: [
-                  Container(
-                    height: MediaQuery.of(context).size.width / 1.5,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: MyChart(
-                      fromDate: widget.fromDate,
-                      toDate: widget.toDate,
-                      expenses: _getExpenses(
-                          widget.fromDate, widget.toDate, state.expenses),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  FittedBox(
-                    child: Text(
-                      "${convertDateToReadable(widget.fromDate)} - ${convertDateToReadable(widget.toDate)}",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
                       children: [
-                        Text(
-                          "Transactions",
-                          style: TextStyle(
-                              color: Colors.grey.shade800,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400),
+                        Container(
+                          height: MediaQuery.of(context).size.width / 1.5,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: MyChart(
+                            fromDate: widget.fromDate,
+                            toDate: widget.toDate,
+                            expenses: _getExpenses(
+                                widget.fromDate, widget.toDate, state.expenses),
+                          ),
                         ),
-                        Text(
-                          '${getTextForCurrency(state.currency)}${_getTotalAmountForTheWeek(state.expenses).toString()}/-',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        FittedBox(
+                          child: Text(
+                            "${convertDateToReadable(widget.fromDate)} - ${convertDateToReadable(widget.toDate)}",
+                            style: const TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w400),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Transactions",
+                                style: TextStyle(
+                                    color: Colors.grey.shade800,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              Text(
+                                '${getTextForCurrency(state.currency)}${_getTotalAmountForTheWeek(state.expenses).toString()}/-',
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Expanded(
+                          child: state.expenses.isNotEmpty
+                              ? ListView.builder(
+                                  itemCount: state.expenses.length,
+                                  itemBuilder: (context, index) {
+                                    return ExpenseCard(
+                                      currency: state.currency,
+                                      expense: state.expenses[index],
+                                      icon: Icons.food_bank_outlined,
+                                      backgroundColor: index % 2 == 0
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                    );
+                                  })
+                              : Center(
+                                  child: FittedBox(
+                                    child: Text(
+                                      'No Transactions for the week\nTry making some.',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline),
+                                    ),
+                                  ),
+                                ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: state.expenses.length,
-                        itemBuilder: (context, index) {
-                          return ExpenseCard(
-                            currency: state.currency,
-                            expense: state.expenses[index],
-                            icon: Icons.food_bank_outlined,
-                            backgroundColor: index % 2 == 0
-                                ? Theme.of(context).colorScheme.secondary
-                                : Theme.of(context).colorScheme.primary,
-                          );
-                        }),
-                  )
+                  if (state.expenses.isEmpty)
+                    Positioned(
+                        top: MediaQuery.of(context).size.width / 5.5,
+                        right: MediaQuery.of(context).size.width / 5.5,
+                        left: MediaQuery.of(context).size.width / 5.5,
+                        child: FittedBox(
+                          child: Text(
+                            'No Data for Analytics',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline),
+                          ),
+                        )),
                 ],
               ),
             );

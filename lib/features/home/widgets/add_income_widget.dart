@@ -44,7 +44,7 @@ void addIncomeDialog(
                           child: Text(
                             negativeButtonTitle,
                             style: TextStyle(
-                                fontSize: 18, color: Colors.grey.shade800),
+                                fontSize: 16, color: Colors.grey.shade800),
                           ))),
                   Expanded(
                       child: CommonGradientButton(
