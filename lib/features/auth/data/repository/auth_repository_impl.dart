@@ -80,9 +80,16 @@ class AuthRepositoryImpl extends AuthRepository {
           await _saveCurrencyInPrefs(userData['currency']);
         }
 
+        var firstName = 'noName';
+
+        if (userData['fullName'] != null) {
+          final String fullName = userData['fullName'];
+          firstName = fullName;
+        }
+
         return MyUser(
           uid: currentUser.uid,
-          fullName: userData['fullName'] ?? "fullName",
+          fullName: firstName,
           email: currentUser.email!,
           currency: convertStringToEnum(Currency.values, userData['currency']),
         );

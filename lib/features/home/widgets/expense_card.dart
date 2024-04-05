@@ -35,7 +35,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
           elevation: 5,
           child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              height: _isExpanded ? 160 : 80,
+              height: _isExpanded ? 150 : 80,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: !_isExpanded
@@ -60,8 +60,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                             width: 10,
                           ),
                           Flexible(
-                            fit: FlexFit.tight,
-                            flex: 2,
+                            flex: 5,
                             child: Text(
                               widget.expense.note,
                               style: const TextStyle(
@@ -70,22 +69,26 @@ class _ExpenseCardState extends State<ExpenseCard> {
                             ),
                           ),
                           const Spacer(),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${getTextForCurrency(widget.currency)}${widget.expense.expenseAmount.toString()}',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                convertDateToReadable(
-                                    widget.expense.expenseDate),
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
+                          FittedBox(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${getTextForCurrency(widget.currency)}${widget.expense.expenseAmount.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  convertDateToReadable(
+                                      widget.expense.expenseDate),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -115,13 +118,14 @@ class _ExpenseCardState extends State<ExpenseCard> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Expanded(
-                                    child: Text(
-                                  widget.expense.note,
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                )),
+                                Flexible(
+                                  child: Text(
+                                    widget.expense.note,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

@@ -5,6 +5,7 @@ import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
 import 'package:expense_tracker_app/features/home/widgets/add_income_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
@@ -41,142 +42,156 @@ class StatsCard extends StatelessWidget {
       height: MediaQuery.of(context).size.width / 1.8,
       width: MediaQuery.of(context).size.width,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Text(
-            "Total Balance",
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            income > 0
-                ? '${getTextForCurrency(currency)}${(income - expensesAmount).toString()}'
-                : "${getTextForCurrency(currency)}0.0",
-            style: const TextStyle(
-                color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+          Flexible(
+            child: FittedBox(
+              child: Column(
+                children: [
+                  const Text(
+                    "Total Balance",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    income > 0
+                        ? '${getTextForCurrency(currency)}${(income - expensesAmount).toString()}'
+                        : "${getTextForCurrency(currency)}0.0",
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
           ),
           const SizedBox(
             height: 30,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    addIncomeDialog(
-                      context,
-                      uid: uid,
-                      controller: incomeTextController,
-                      negativeButtonTitle: "Cancel",
-                      positiveButtonTitle: "Add Income",
-                      negativeCallBack: () {
-                        Navigator.of(context).pop();
-                        incomeTextController.dispose();
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: FittedBox(
+                    child: GestureDetector(
+                      onTap: () {
+                        addIncomeDialog(
+                          context,
+                          uid: uid,
+                          controller: incomeTextController,
+                          negativeButtonTitle: "Cancel",
+                          positiveButtonTitle: "Add Income",
+                          negativeCallBack: () {
+                            Navigator.of(context).pop();
+                          },
+                          positiveCallBack: () {
+                            Navigator.of(context).pop();
+                            context
+                                .read<HomeBloc>()
+                                .add(HomeAddIncomeToDatabaseEvent(
+                                    income: IncomeEntity(
+                                  userId: uid,
+                                  incomeId: const Uuid().v4(),
+                                  amount: double.parse(
+                                      incomeTextController.text.trim()),
+                                  date: DateTime.now(),
+                                )));
+                          },
+                        );
                       },
-                      positiveCallBack: () {
-                        Navigator.of(context).pop();
-                        context
-                            .read<HomeBloc>()
-                            .add(HomeAddIncomeToDatabaseEvent(
-                                income: IncomeEntity(
-                              userId: uid,
-                              incomeId: const Uuid().v4(),
-                              amount: double.parse(
-                                  incomeTextController.text.trim()),
-                              date: DateTime.now(),
-                            )));
-                        incomeTextController.dispose();
-                      },
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(50)),
-                        child: const Icon(
-                          CupertinoIcons.arrow_down,
-                          size: 20,
-                          color: Colors.greenAccent,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          const Text(
-                            "Income",
-                            style: TextStyle(
-                                color: Colors.white60,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
-                          Text(
-                            '${getTextForCurrency(currency)}${income.toString()}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(50)),
+                            child: const Icon(
+                              CupertinoIcons.arrow_down,
+                              size: 20,
+                              color: Colors.greenAccent,
                             ),
-                          )
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Income",
+                                style: TextStyle(
+                                    color: Colors.white60,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                              Text(
+                                '${getTextForCurrency(currency)}${income.toString()}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              )
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: const Icon(
-                        CupertinoIcons.arrow_up,
-                        size: 20,
-                        color: Colors.red,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                Flexible(
+                  child: FittedBox(
+                    child: Row(
                       children: [
-                        const Text(
-                          "Expenses",
-                          style: TextStyle(
-                            color: Colors.white60,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                        Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: const Icon(
+                            CupertinoIcons.arrow_up,
+                            size: 20,
+                            color: Colors.red,
                           ),
                         ),
-                        Text(
-                          '${getTextForCurrency(currency)}${expensesAmount.toString()}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        )
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Expenses",
+                              style: TextStyle(
+                                color: Colors.white60,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              '${getTextForCurrency(currency)}${expensesAmount.toString()}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
