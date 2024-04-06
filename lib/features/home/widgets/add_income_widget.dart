@@ -32,6 +32,7 @@ void addIncomeDialog(
             content: Form(
                 key: globalKey,
                 child: IconTextFieldWidget(
+                    inputType: TextInputType.number,
                     allowAmountValueOnly: true,
                     controller: controller,
                     icon: Icons.money)),
