@@ -35,12 +35,14 @@ class CommonGradientButton extends StatelessWidget {
                 ),
         ),
         child: Center(
-          child: Text(
-            buttonTitle,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+          child: FittedBox(
+            child: Text(
+              buttonTitle,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

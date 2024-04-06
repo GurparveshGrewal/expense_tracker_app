@@ -8,6 +8,7 @@ class ExpenseCard extends StatefulWidget {
   final Color backgroundColor;
   final IconData icon;
   final Currency currency;
+
   const ExpenseCard(
       {required this.expense,
       required this.backgroundColor,
@@ -35,7 +36,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
           elevation: 5,
           child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              height: _isExpanded ? 160 : 80,
+              height: _isExpanded ? 150 : 80,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: !_isExpanded
@@ -44,48 +45,59 @@ class _ExpenseCardState extends State<ExpenseCard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                                color: widget.backgroundColor,
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Icon(
-                              widget.icon,
-                              size: 30,
-                              color: Colors.white,
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: widget.backgroundColor,
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: Icon(
+                                    widget.icon,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    widget.expense.note,
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          Flexible(
-                            fit: FlexFit.tight,
-                            flex: 2,
-                            child: Text(
-                              widget.expense.note,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const Spacer(),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${getTextForCurrency(widget.currency)}${widget.expense.expenseAmount.toString()}',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                convertDateToReadable(
-                                    widget.expense.expenseDate),
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
+                          FittedBox(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${getTextForCurrency(widget.currency)}${widget.expense.expenseAmount.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  convertDateToReadable(
+                                      widget.expense.expenseDate),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -115,13 +127,14 @@ class _ExpenseCardState extends State<ExpenseCard> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Expanded(
-                                    child: Text(
-                                  widget.expense.note,
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                )),
+                                Flexible(
+                                  child: Text(
+                                    widget.expense.note,
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

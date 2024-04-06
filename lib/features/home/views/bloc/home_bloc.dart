@@ -8,6 +8,7 @@ import 'package:expense_tracker_app/features/home/domain/entity/expense_entity.d
 import 'package:expense_tracker_app/features/home/domain/entity/income_entity.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/add_expense_to_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/add_income_to_database.dart';
+import 'package:expense_tracker_app/features/home/domain/usecases/clear_cache_and_prefs.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_expenses_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_incomes_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/get_saved_currency.dart';
@@ -25,6 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final FetchIncomesFromDatabaseUsecase _fetchIncomesFromDatabaseUsecase;
   final AddIncomeToDatabaseUsecase _addIncomeToDatabaseUsecase;
   final SharedPreferencesRepository _sharedPreferencesRepository;
+  final ClearCacheAndPrefsUsecase _cacheAndPrefsUsecase;
   HomeBloc({
     required SharedPreferencesRepository sharedPreferencesRepository,
     required GetSavedCurrencyUsecase getSavedCurrencyUsecase,
@@ -33,6 +35,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required FetchExpensesFromDatabaseUsecase fetchExpensesFromDatabaseUsecase,
     required FetchIncomesFromDatabaseUsecase fetchIncomes,
     required AddIncomeToDatabaseUsecase addIncomeToDatabaseUsecase,
+    required ClearCacheAndPrefsUsecase clearCacheAndPrefsUsecase,
   })  : _sharedPreferencesRepository = sharedPreferencesRepository,
         _getSavedCurrencyUsecase = getSavedCurrencyUsecase,
         _saveSelectedCurrencyUsecase = saveSelectedCurrencyUsecase,
@@ -40,6 +43,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         _fetchExpensesFromDatabaseUsecase = fetchExpensesFromDatabaseUsecase,
         _fetchIncomesFromDatabaseUsecase = fetchIncomes,
         _addIncomeToDatabaseUsecase = addIncomeToDatabaseUsecase,
+        _cacheAndPrefsUsecase = clearCacheAndPrefsUsecase,
         super(HomeInitial()) {
     on<HomeEvent>((event, emit) => emit(HomeLoadingState()));
     on<HomeAddExpenseToDatabaseProcessEvent>(addExpenseToDatabase);
@@ -47,6 +51,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeAddIncomeToDatabaseEvent>(addIncomeToDatabase);
     on<HomeCheckSelectedCurrencyEvent>(checkSavedCurrency);
     on<HomeSaveSelectedCurrencyEvent>(saveSelectedCurrency);
+    on<HomeClearCacheAndPrefsEvent>(clearCacheAndPrefs);
   }
 
   Future<void> checkSavedCurrency(
@@ -127,6 +132,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ));
     } catch (e) {
       emit(HomeFailedState());
+    }
+  }
+
+  Future<void> clearCacheAndPrefs(
+      HomeClearCacheAndPrefsEvent event, Emitter<HomeState> emit) async {
+    try {
+      await _cacheAndPrefsUsecase({});
+    } catch (e) {
+      rethrow;
     }
   }
 }

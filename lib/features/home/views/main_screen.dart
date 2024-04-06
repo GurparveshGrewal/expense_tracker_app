@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:expense_tracker_app/core/commons/widgets/double_action_alert_dialog.dart';
 import 'package:expense_tracker_app/core/utils/functions.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
@@ -25,6 +27,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final TextEditingController _incomeTextController = TextEditingController();
+  List<Color> cardColors = [];
 
   @override
   void initState() {
@@ -63,72 +66,85 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Random random = Random();
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.yellow.shade700,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Icon(
-                    CupertinoIcons.person_fill,
-                    size: 30,
-                    color:
-                        Theme.of(context).colorScheme.outline.withOpacity(0.5),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Welcome!",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      widget.currentUser.fullName,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                      ),
-                    )
-                  ],
-                ),
-                const Spacer(),
-                IconButton(
-                    onPressed: () {
-                      doubleActionAlertDialog(
-                        context,
-                        title: 'Signing Out!',
-                        content: "Are you sure you want to sign out?",
-                        negativeButtonTitle: 'Cancel',
-                        positiveButtonTitle: 'Sign Out',
-                        negativeCallBack: () {
-                          Navigator.of(context).pop();
-                        },
-                        positiveCallBack: () {
-                          Navigator.of(context).pop();
-                          context.read<AuthBloc>().add(AuthSignOutEvent());
-                        },
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.logout_sharp,
+            SizedBox(
+              height: 50,
+              child: Row(
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.yellow.shade700,
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Icon(
+                      CupertinoIcons.person_fill,
                       size: 30,
-                    )),
-              ],
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outline
+                          .withOpacity(0.5),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Welcome!",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      Flexible(
+                        child: FittedBox(
+                          child: Text(
+                            widget.currentUser.fullName,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () {
+                        doubleActionAlertDialog(
+                          context,
+                          title: 'Signing Out!',
+                          content: "Are you sure you want to sign out?",
+                          negativeButtonTitle: 'Cancel',
+                          positiveButtonTitle: 'Sign Out',
+                          negativeCallBack: () {
+                            Navigator.of(context).pop();
+                          },
+                          positiveCallBack: () {
+                            Navigator.of(context).pop();
+                            context.read<AuthBloc>().add(AuthSignOutEvent());
+                            context
+                                .read<HomeBloc>()
+                                .add(HomeClearCacheAndPrefsEvent());
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.logout_sharp,
+                        size: 30,
+                      )),
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -176,14 +192,14 @@ class _MainScreenState extends State<MainScreen> {
               child: ListView.builder(
                   itemCount: widget.initializedState.expenses.length,
                   itemBuilder: (context, index) {
+                    int randomIndex = random.nextInt(4);
+
                     return ExpenseCard(
                       currency: widget.initializedState.currency,
                       expense: widget.initializedState.expenses[index],
                       icon: getIconForExpenseCategory(widget
                           .initializedState.expenses[index].expenseCategory),
-                      backgroundColor: index % 2 == 0
-                          ? Theme.of(context).colorScheme.secondary
-                          : Theme.of(context).colorScheme.primary,
+                      backgroundColor: _getColor(randomIndex),
                     );
                   }),
             )
@@ -191,6 +207,17 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  Color _getColor(int index) {
+    List<Color> cardColors = [
+      Theme.of(context).colorScheme.primary,
+      Theme.of(context).colorScheme.secondary,
+      Theme.of(context).colorScheme.tertiary,
+      Theme.of(context).colorScheme.error.withOpacity(0.75),
+    ];
+
+    return cardColors[index];
   }
 
   double _getTotalExpenses(List<ExpenseEntity> transactions) {

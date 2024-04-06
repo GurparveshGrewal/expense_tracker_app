@@ -134,6 +134,13 @@ class HomeRepositoryImpl extends HomeRepository {
     return expenses;
   }
 
+  @override
+  Future<void> clearCacheAndPrefs() async {
+    _cachedExpenses = [];
+    _cachedIncomes = [];
+    await _sharedPreferencesRepository.clearSharedPrefs();
+  }
+
   bool _isDateInRange(DateTime date, DateTime startDate, DateTime endDate) {
     return date.isAtSameMomentAs(startDate) ||
         date.isAtSameMomentAs(endDate) ||

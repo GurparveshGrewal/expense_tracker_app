@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:expense_tracker_app/app_view.dart';
 import 'package:expense_tracker_app/core/commons/cubit/app_user_cubit.dart';
 import 'package:expense_tracker_app/core/utils/show_snackbar.dart';
 import 'package:expense_tracker_app/features/auth/views/bloc/auth_bloc.dart';
 import 'package:expense_tracker_app/features/home/views/home_page.dart';
+import 'package:expense_tracker_app/features/splash/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 2), () {
       context.read<AuthBloc>().add(AuthCheckIfUserLoggendIn());
     });
   }
@@ -55,34 +55,7 @@ class _MyAppState extends State<MyApp> {
             return const MyAppView();
           }
 
-          return Scaffold(
-            body: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.secondary,
-                  Theme.of(context).colorScheme.tertiary,
-                ], transform: const GradientRotation(pi / 5))),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'EXPENDS',
-                      style: TextStyle(
-                          letterSpacing: 4,
-                          fontSize: 48,
-                          color: Colors.white,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
+          return const SplashScreen();
         },
       ),
     );

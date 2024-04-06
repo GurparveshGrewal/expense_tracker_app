@@ -38,3 +38,5 @@ class HomeAddIncomeToDatabaseEvent extends HomeEvent {
 
   HomeAddIncomeToDatabaseEvent({required this.income});
 }
+
+class HomeClearCacheAndPrefsEvent extends HomeEvent {}

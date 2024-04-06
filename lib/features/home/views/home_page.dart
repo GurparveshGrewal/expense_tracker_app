@@ -72,10 +72,9 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton(
             shape: const CircleBorder(),
             onPressed: () {
-              // TODO: change constant value
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => const AddNewExpensePage(
-                        currency: Currency.inr,
+                  builder: (ctx) => AddNewExpensePage(
+                        currency: widget.myUser.currency ?? Currency.inr,
                       )));
             },
             child: Container(

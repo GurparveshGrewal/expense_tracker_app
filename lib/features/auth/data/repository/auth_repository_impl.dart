@@ -80,9 +80,16 @@ class AuthRepositoryImpl extends AuthRepository {
           await _saveCurrencyInPrefs(userData['currency']);
         }
 
+        var firstName = 'noName';
+
+        if (userData['fullName'] != null) {
+          final String fullName = userData['fullName'];
+          firstName = fullName;
+        }
+
         return MyUser(
           uid: currentUser.uid,
-          fullName: userData['fullName'] ?? "fullName",
+          fullName: firstName,
           email: currentUser.email!,
           currency: convertStringToEnum(Currency.values, userData['currency']),
         );
@@ -122,11 +129,6 @@ class AuthRepositoryImpl extends AuthRepository {
     } catch (e) {
       rethrow;
     }
-  }
-
-  @override
-  Future<void> clearSharedPrefs() async {
-    await _sharedPreferencesRepository.clearSharedPrefs();
   }
 
   Future<void> _saveCurrencyInPrefs(String currency) async {
