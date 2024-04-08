@@ -30,15 +30,15 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
 
+flutter_icons:
+  android: true
+  image_path : "assets/icons/expends_icon.png"
 
 flutter:
-
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/icons/expends_icon.png
 
   
