@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class IconTextFieldWidget extends StatelessWidget {
+class IconTextFieldWidget extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final IconData icon;
@@ -18,15 +18,28 @@ class IconTextFieldWidget extends StatelessWidget {
       super.key});
 
   @override
+  State<IconTextFieldWidget> createState() => _IconTextFieldWidgetState();
+}
+
+class _IconTextFieldWidgetState extends State<IconTextFieldWidget> {
+  bool _obsecurePassword = true;
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      keyboardType: inputType,
-      obscureText: passwordField,
+      controller: widget.controller,
+      keyboardType: widget.inputType,
+      obscureText: _obsecurePassword,
       decoration: InputDecoration(
-        hintText: hintText,
+        suffixIcon: widget.passwordField
+            ? Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: _getIcon(),
+              )
+            : null,
+        hintText: widget.hintText,
         prefixIcon: Icon(
-          icon,
+          widget.icon,
           size: 20,
           color: Theme.of(context).colorScheme.outline,
         ),
@@ -41,12 +54,12 @@ class IconTextFieldWidget extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return "This field can't be empty";
         } else {
-          if (inputType == TextInputType.emailAddress) {
+          if (widget.inputType == TextInputType.emailAddress) {
             if (!value.contains('@') || !value.contains('.com')) {
               return "Invalid email address.";
             }
           }
-          if (allowAmountValueOnly) {
+          if (widget.allowAmountValueOnly) {
             try {
               double.parse(value);
               return null;
@@ -57,6 +70,20 @@ class IconTextFieldWidget extends StatelessWidget {
           return null;
         }
       },
+    );
+  }
+
+  Widget _getIcon() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _obsecurePassword = !_obsecurePassword;
+        });
+      },
+      child: Icon(
+        _obsecurePassword ? Icons.visibility_off : Icons.visibility,
+        color: Theme.of(context).colorScheme.outline,
+      ),
     );
   }
 }
