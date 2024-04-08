@@ -1,5 +1,6 @@
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
 import 'package:expense_tracker_app/core/utils/enums.dart';
+import 'package:expense_tracker_app/core/utils/show_snackbar.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/home/views/add_new_expense_page.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
@@ -26,6 +27,13 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       activePage = pageNumber;
     });
+  }
+
+  void _initalFetch({required String uid, bool isHardRefresh = false}) {
+    context.read<HomeBloc>().add(HomeInitialFetchEvent(
+          userId: uid,
+          isHardRefresh: isHardRefresh,
+        ));
   }
 
   @override
@@ -97,23 +105,27 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 _showSelectCurrencyDialog = false;
               });
-              context
-                  .read<HomeBloc>()
-                  .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+              _initalFetch(
+                uid: widget.myUser.uid,
+              );
             } else if (state is HomeFirstSignInState) {
               setState(() {
                 _showSelectCurrencyDialog = true;
               });
             } else if (state is HomeExpenseAddedSuccessState) {
-              context.read<HomeBloc>().add(HomeInitialFetchEvent(
-                    userId: widget.myUser.uid,
-                    isHardRefresh: state.isHardRefreshRequired,
-                  ));
+              _initalFetch(
+                  uid: widget.myUser.uid,
+                  isHardRefresh: state.isHardRefreshRequired);
             } else if (state is HomeIncomeAddedSuccessState) {
-              context.read<HomeBloc>().add(HomeInitialFetchEvent(
-                    userId: widget.myUser.uid,
-                    isHardRefresh: state.isHardRefreshRequired,
-                  ));
+              _initalFetch(
+                  uid: widget.myUser.uid,
+                  isHardRefresh: state.isHardRefreshRequired);
+            } else if (state is HomeRemoveExpenseSuccessState) {
+              showSnackBar(context, "Expense Removed successfully");
+              _initalFetch(uid: widget.myUser.uid);
+            } else if (state is HomeDbCRUDFailedState) {
+              showSnackBar(context, "Failed to Remove Expense");
+              _initalFetch(uid: widget.myUser.uid);
             }
           },
           builder: (context, state) {

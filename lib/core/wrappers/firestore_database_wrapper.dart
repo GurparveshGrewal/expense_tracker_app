@@ -120,4 +120,22 @@ class FirestoreDatabaseWrapper {
       rethrow;
     }
   }
+
+  Future<void> deleteExpense(String expenseId) async {
+    try {
+      final querySnapshot = await _firebaseFirestore
+          .collection(_expensesCollectionName)
+          .where('expenseId', isEqualTo: expenseId)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentReference documentReference =
+            querySnapshot.docs.first.reference;
+
+        await documentReference.delete();
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

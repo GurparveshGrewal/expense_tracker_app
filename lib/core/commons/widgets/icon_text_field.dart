@@ -22,7 +22,13 @@ class IconTextFieldWidget extends StatefulWidget {
 }
 
 class _IconTextFieldWidgetState extends State<IconTextFieldWidget> {
-  bool _obsecurePassword = true;
+  bool _obsecurePassword = false;
+
+  @override
+  void initState() {
+    _obsecurePassword = widget.passwordField;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -33,5 +33,7 @@ abstract class HomeRepository {
     required DateTime toDate,
   });
 
+  Future<void> deleteExpense({required String expenseId});
+
   Future<void> clearCacheAndPrefs();
 }

@@ -63,4 +63,8 @@ class HomeIncomeAddedSuccessState extends HomeState {
   });
 }
 
+class HomeRemoveExpenseSuccessState extends HomeState {}
+
+class HomeDbCRUDFailedState extends HomeState {}
+
 class HomeFailedState extends HomeState {}

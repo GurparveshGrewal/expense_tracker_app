@@ -141,6 +141,16 @@ class HomeRepositoryImpl extends HomeRepository {
     await _sharedPreferencesRepository.clearSharedPrefs();
   }
 
+  @override
+  Future<void> deleteExpense({required String expenseId}) async {
+    try {
+      await _firestoreDatabaseWrapper.deleteExpense(expenseId);
+      _cachedExpenses.removeWhere((expense) => expense.expenseId == expenseId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   bool _isDateInRange(DateTime date, DateTime startDate, DateTime endDate) {
     return date.isAtSameMomentAs(startDate) ||
         date.isAtSameMomentAs(endDate) ||
