@@ -106,15 +106,40 @@ class AuthRepositoryImpl extends AuthRepository {
     try {
       final user = await _firebaseAuthWrapper.signInWithGoogle();
       if (user != null) {
-        await _firestoreDatabaseWrapper.addUserToDatabase(uid: user.uid, data: {
-          "fullName": user.displayName ?? "empty",
-          "email": user.email!,
-          "createdAt": DateTime.now().toIso8601String(),
-        });
-        return MyUser(
-            uid: user.uid,
-            fullName: user.displayName ?? "User",
-            email: user.email!);
+        if (await _firestoreDatabaseWrapper.checkIfUserExistsAlready(
+            uid: user.uid)) {
+          final rawData =
+              await _firestoreDatabaseWrapper.getUserData(uid: user.uid);
+
+          if (rawData['currency'] != null) {
+            await _saveCurrencyInPrefs(rawData['currency']);
+          }
+
+          String firstName = 'noName';
+
+          if (rawData['fullName'] != null) {
+            final String fullName = rawData['fullName'];
+            firstName = fullName;
+          }
+
+          return MyUser(
+              uid: user.uid,
+              fullName: firstName,
+              email: rawData['email'],
+              currency:
+                  convertStringToEnum(Currency.values, rawData['currency']));
+        } else {
+          await _firestoreDatabaseWrapper
+              .addUserToDatabase(uid: user.uid, data: {
+            "fullName": user.displayName ?? "empty",
+            "email": user.email!,
+            "createdAt": DateTime.now().toIso8601String(),
+          });
+          return MyUser(
+              uid: user.uid,
+              fullName: user.displayName ?? "User",
+              email: user.email!);
+        }
       }
       return MyUser.empty;
     } catch (e) {
