@@ -104,4 +104,20 @@ class FirestoreDatabaseWrapper {
       rethrow;
     }
   }
+
+  Future<bool> checkIfUserExistsAlready({required String uid}) async {
+    try {
+      final documentReference = await _firebaseFirestore
+          .collection(_userCollectionName)
+          .doc(uid)
+          .get();
+      if (documentReference.exists) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
