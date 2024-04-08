@@ -15,6 +15,7 @@ import 'package:expense_tracker_app/features/home/domain/repository/home_reposit
 import 'package:expense_tracker_app/features/home/domain/usecases/add_expense_to_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/add_income_to_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/clear_cache_and_prefs.dart';
+import 'package:expense_tracker_app/features/home/domain/usecases/delete_expense_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_expenses_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_filtered_expenses.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_incomes_from_database.dart';
@@ -91,6 +92,8 @@ void _initHome() {
       .registerFactory(() => SaveSelectedCurrencyUsecase(serviceLocator()));
   serviceLocator
       .registerFactory(() => ClearCacheAndPrefsUsecase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => DeleteExpenseFromDatabase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => HomeBloc(
@@ -101,6 +104,7 @@ void _initHome() {
         fetchExpensesFromDatabaseUsecase: serviceLocator(),
         fetchIncomes: serviceLocator(),
         addIncomeToDatabaseUsecase: serviceLocator(),
+        deleteExpenseFromDatabase: serviceLocator(),
         clearCacheAndPrefsUsecase: serviceLocator(),
       ));
   serviceLocator.registerLazySingleton(() => StatsBloc(

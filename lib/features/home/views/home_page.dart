@@ -1,5 +1,6 @@
 import 'package:expense_tracker_app/core/commons/widgets/loader.dart';
 import 'package:expense_tracker_app/core/utils/enums.dart';
+import 'package:expense_tracker_app/core/utils/show_snackbar.dart';
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/home/views/add_new_expense_page.dart';
 import 'package:expense_tracker_app/features/home/views/bloc/home_bloc.dart';
@@ -114,6 +115,10 @@ class _HomePageState extends State<HomePage> {
                     userId: widget.myUser.uid,
                     isHardRefresh: state.isHardRefreshRequired,
                   ));
+            } else if (state is HomeRemoveExpenseSuccessState) {
+              showSnackBar(context, "Expense Removed successfully");
+            } else if (state is HomeDbCRUDFailedState) {
+              showSnackBar(context, "Failed to Remove Expense");
             }
           },
           builder: (context, state) {

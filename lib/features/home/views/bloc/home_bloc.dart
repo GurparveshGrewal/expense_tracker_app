@@ -9,6 +9,7 @@ import 'package:expense_tracker_app/features/home/domain/entity/income_entity.da
 import 'package:expense_tracker_app/features/home/domain/usecases/add_expense_to_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/add_income_to_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/clear_cache_and_prefs.dart';
+import 'package:expense_tracker_app/features/home/domain/usecases/delete_expense_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_expenses_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/fetch_incomes_from_database.dart';
 import 'package:expense_tracker_app/features/home/domain/usecases/get_saved_currency.dart';
@@ -26,6 +27,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final FetchIncomesFromDatabaseUsecase _fetchIncomesFromDatabaseUsecase;
   final AddIncomeToDatabaseUsecase _addIncomeToDatabaseUsecase;
   final SharedPreferencesRepository _sharedPreferencesRepository;
+  final DeleteExpenseFromDatabase _deleteExpenseFromDatabase;
   final ClearCacheAndPrefsUsecase _cacheAndPrefsUsecase;
   HomeBloc({
     required SharedPreferencesRepository sharedPreferencesRepository,
@@ -35,6 +37,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required FetchExpensesFromDatabaseUsecase fetchExpensesFromDatabaseUsecase,
     required FetchIncomesFromDatabaseUsecase fetchIncomes,
     required AddIncomeToDatabaseUsecase addIncomeToDatabaseUsecase,
+    required DeleteExpenseFromDatabase deleteExpenseFromDatabase,
     required ClearCacheAndPrefsUsecase clearCacheAndPrefsUsecase,
   })  : _sharedPreferencesRepository = sharedPreferencesRepository,
         _getSavedCurrencyUsecase = getSavedCurrencyUsecase,
@@ -43,15 +46,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         _fetchExpensesFromDatabaseUsecase = fetchExpensesFromDatabaseUsecase,
         _fetchIncomesFromDatabaseUsecase = fetchIncomes,
         _addIncomeToDatabaseUsecase = addIncomeToDatabaseUsecase,
+        _deleteExpenseFromDatabase = deleteExpenseFromDatabase,
         _cacheAndPrefsUsecase = clearCacheAndPrefsUsecase,
         super(HomeInitial()) {
-    on<HomeEvent>((event, emit) => emit(HomeLoadingState()));
+    on<HomeEvent>((event, emit) {
+      if (event is! HomeDeleteExpenseFromDatabaseEvent) {
+        emit(HomeLoadingState());
+      }
+    });
     on<HomeAddExpenseToDatabaseProcessEvent>(addExpenseToDatabase);
     on<HomeInitialFetchEvent>(initialHomeDataFetch);
     on<HomeAddIncomeToDatabaseEvent>(addIncomeToDatabase);
     on<HomeCheckSelectedCurrencyEvent>(checkSavedCurrency);
     on<HomeSaveSelectedCurrencyEvent>(saveSelectedCurrency);
     on<HomeClearCacheAndPrefsEvent>(clearCacheAndPrefs);
+    on<HomeDeleteExpenseFromDatabaseEvent>(deleteExpenseFromDB);
   }
 
   Future<void> checkSavedCurrency(
@@ -132,6 +141,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ));
     } catch (e) {
       emit(HomeFailedState());
+    }
+  }
+
+  Future<void> deleteExpenseFromDB(
+      HomeDeleteExpenseFromDatabaseEvent event, Emitter<HomeState> emit) async {
+    try {
+      await _deleteExpenseFromDatabase(
+          DeleteExpenseFromDatabaseParams(event.expenseId));
+      emit(HomeRemoveExpenseSuccessState());
+    } catch (e) {
+      emit(HomeDbCRUDFailedState());
     }
   }
 

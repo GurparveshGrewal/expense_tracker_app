@@ -39,4 +39,10 @@ class HomeAddIncomeToDatabaseEvent extends HomeEvent {
   HomeAddIncomeToDatabaseEvent({required this.income});
 }
 
+class HomeDeleteExpenseFromDatabaseEvent extends HomeEvent {
+  final String expenseId;
+
+  HomeDeleteExpenseFromDatabaseEvent(this.expenseId);
+}
+
 class HomeClearCacheAndPrefsEvent extends HomeEvent {}
