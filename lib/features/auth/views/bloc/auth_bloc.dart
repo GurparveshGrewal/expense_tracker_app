@@ -106,11 +106,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> authProcessSignInWithGoogle(
       AuthProcessSignInWithGoogle event, Emitter<AuthState> emit) async {
-    final user = await _signInWithGoogleUsecase({});
-    if (user.uid != '') {
-      _emitAuthSuccess(user, emit);
-    } else {
-      emit(AuthUserLogInFailedState(''));
+    try {
+      final user = await _signInWithGoogleUsecase({});
+      if (user.uid != '') {
+        _emitAuthSuccess(user, emit);
+      } else {
+        emit(AuthUserLogInFailedState(''));
+      }
+    } on AuthFailure catch (failure) {
+      _emitAuthFailure(
+          _getAuthFailureStateMessageFromCode(failure.message), emit);
+    } on FirestoreDatabaseFailure catch (failure) {
+      _emitAuthFailure(
+          _getAuthFailureStateMessageFromFirestoreExceptionCode(
+              failure.message),
+          emit);
     }
   }
 
