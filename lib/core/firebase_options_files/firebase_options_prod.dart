@@ -14,7 +14,7 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-class DefaultFirebaseOptions {
+class ProdFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       throw UnsupportedError(
@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCVjirVkYnuKI67t8nvhcOORj9VYl-fdAU',
-    appId: '1:884504518933:android:d161bfd829f00d211cc91c',
-    messagingSenderId: '884504518933',
-    projectId: 'expends-app',
-    storageBucket: 'expends-app.appspot.com',
+    apiKey: 'AIzaSyCFtSnXuD20Jd2JZMIZ-sYtd8GO_56gpDA',
+    appId: '1:225764626365:android:610fa96c2bca55e5538cd4',
+    messagingSenderId: '225764626365',
+    projectId: 'expends-app-prod',
+    storageBucket: 'expends-app-prod.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAlj4xWVhkjpVGEHrPcV9I1fgkl_DzoyMI',
-    appId: '1:884504518933:ios:75c4f3ebaa950aaa1cc91c',
-    messagingSenderId: '884504518933',
-    projectId: 'expends-app',
-    storageBucket: 'expends-app.appspot.com',
+    apiKey: 'AIzaSyCfQzu7lEWP2q8Kg5O03JFZm-2aifuoWeg',
+    appId: '1:225764626365:ios:bb21ae05218a958e538cd4',
+    messagingSenderId: '225764626365',
+    projectId: 'expends-app-prod',
+    storageBucket: 'expends-app-prod.appspot.com',
     iosBundleId: 'com.example.expenseTrackerApp',
   );
 }
