@@ -29,6 +29,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _initalFetch({required String uid, bool isHardRefresh = false}) {
+    context.read<HomeBloc>().add(HomeInitialFetchEvent(
+          userId: uid,
+          isHardRefresh: isHardRefresh,
+        ));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -98,27 +105,27 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 _showSelectCurrencyDialog = false;
               });
-              context
-                  .read<HomeBloc>()
-                  .add(HomeInitialFetchEvent(userId: widget.myUser.uid));
+              _initalFetch(
+                uid: widget.myUser.uid,
+              );
             } else if (state is HomeFirstSignInState) {
               setState(() {
                 _showSelectCurrencyDialog = true;
               });
             } else if (state is HomeExpenseAddedSuccessState) {
-              context.read<HomeBloc>().add(HomeInitialFetchEvent(
-                    userId: widget.myUser.uid,
-                    isHardRefresh: state.isHardRefreshRequired,
-                  ));
+              _initalFetch(
+                  uid: widget.myUser.uid,
+                  isHardRefresh: state.isHardRefreshRequired);
             } else if (state is HomeIncomeAddedSuccessState) {
-              context.read<HomeBloc>().add(HomeInitialFetchEvent(
-                    userId: widget.myUser.uid,
-                    isHardRefresh: state.isHardRefreshRequired,
-                  ));
+              _initalFetch(
+                  uid: widget.myUser.uid,
+                  isHardRefresh: state.isHardRefreshRequired);
             } else if (state is HomeRemoveExpenseSuccessState) {
               showSnackBar(context, "Expense Removed successfully");
+              _initalFetch(uid: widget.myUser.uid);
             } else if (state is HomeDbCRUDFailedState) {
               showSnackBar(context, "Failed to Remove Expense");
+              _initalFetch(uid: widget.myUser.uid);
             }
           },
           builder: (context, state) {
