@@ -68,6 +68,8 @@ class FirebaseAuthWrapper {
       return userCredential.user!;
     } on FirebaseAuthException catch (e) {
       throw AuthFailure(e.code);
+    } on PlatformException catch (e) {
+      throw AuthFailure(e.code);
     }
   }
 }
