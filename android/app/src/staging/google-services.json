@@ -1,45 +1,45 @@
 {
   "project_info": {
-    "project_number": "884504518933",
-    "project_id": "expends-app",
-    "storage_bucket": "expends-app.appspot.com"
+    "project_number": "636141818622",
+    "project_id": "expends-staging",
+    "storage_bucket": "expends-staging.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:884504518933:android:d161bfd829f00d211cc91c",
+        "mobilesdk_app_id": "1:636141818622:android:6f0ef52eb8e7f0d7c04baf",
         "android_client_info": {
-          "package_name": "com.example.expense_tracker_app"
+          "package_name": "com.skyvision.expense_tracker_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "884504518933-7uv84a57kthf2r2i7m4n06an1tjv8jnl.apps.googleusercontent.com",
+          "client_id": "636141818622-fv6tdlsdkha9dubuh3t5iutrt6qlssng.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.expense_tracker_app",
-            "certificate_hash": "f299dff7652d67b1ca1c81a545d69e6b28d9450d"
+            "package_name": "com.skyvision.expense_tracker_app",
+            "certificate_hash": "0d0201b74631e5f1aefaf741b672a1069cf8e22b"
           }
         },
         {
-          "client_id": "884504518933-9fs98kq9gpmesm17j8uvnbbpsj6ol1uv.apps.googleusercontent.com",
+          "client_id": "636141818622-td461lm6ru084kqihome51ehkg6kiqb4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCVjirVkYnuKI67t8nvhcOORj9VYl-fdAU"
+          "current_key": "AIzaSyDeml0n3gDi6Iy4Q02lp1t_r3NX2YYZLjI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "884504518933-9fs98kq9gpmesm17j8uvnbbpsj6ol1uv.apps.googleusercontent.com",
+              "client_id": "636141818622-td461lm6ru084kqihome51ehkg6kiqb4.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "884504518933-b1dp9hfc2q54uejk5fcocefs6bsmcskl.apps.googleusercontent.com",
+              "client_id": "636141818622-6e09enifmf202fifgmnvk4hgj3t6rlod.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.expenseTrackerApp"
