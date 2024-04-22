@@ -1,4 +1,4 @@
-name: test Flutter CI workflow 
+name: Flutter CI workflow 
 on : push
 
 jobs:
