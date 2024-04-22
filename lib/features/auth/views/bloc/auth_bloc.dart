@@ -6,7 +6,7 @@ import 'package:expense_tracker_app/core/commons/exceptions/failure_exceptions.d
 import 'package:expense_tracker_app/features/auth/domain/entities/my_user_entity.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/check_current_user_usecase.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/sign_out.dart';
-import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_email_password%20.dart';
+import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_email_password.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signin_with_google.dart';
 import 'package:expense_tracker_app/features/auth/domain/usecases/signup_with_email_password.dart';
 import 'package:flutter/material.dart';
