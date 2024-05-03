@@ -1,16 +1,23 @@
-# expense_tracker_app
+Expense Tracker App - Expends
 
-A new Flutter project.
+Expense Tracker App is a mobile application developed using Flutter for tracking expenses. It allows users to manage their expenses efficiently, categorize them based on different categories, and analyze their spending patterns. The app features Firebase backend for authentication and data storage, dependency injection for managing dependencies, BLoC state management for handling application state, Go router navigation 2.0 for navigation management, and animations for enhancing user experience.
 
-## Getting Started
+Features
 
-This project is a starting point for a Flutter application.
+Expense Management: Easily manage and track expenses with intuitive user interface.
+Category-based Filtering: Categorize expenses based on different categories for better organization.
+Firebase Integration: Utilizes Firebase backend for user authentication and data storage.
+Dependency Injection: Implements dependency injection for managing and providing dependencies throughout the app.
+BLoC State Management: Utilizes BLoC pattern for managing application state and business logic.
+Go Router Navigation 2.0: Implements Go router for efficient navigation management within the app.
+Localization: Supports localization for multiple languages to enhance accessibility.
+Animations: Includes animations to provide a visually appealing user experience.
+Getting Started
 
-A few resources to get you started if this is your first Flutter project:
+To get started with the Expense Tracker App, follow these steps:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Clone the repository to your local machine.
+Set up Firebase backend by creating a project and configuring authentication and database.
+Update the Firebase configuration in the app to connect to your Firebase project.
+Run the app on an emulator or physical device to start tracking your expenses.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
