@@ -50,19 +50,23 @@ class StagingFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCVjirVkYnuKI67t8nvhcOORj9VYl-fdAU',
-    appId: '1:884504518933:android:d161bfd829f00d211cc91c',
-    messagingSenderId: '884504518933',
-    projectId: 'expends-app',
-    storageBucket: 'expends-app.appspot.com',
+    apiKey: 'AIzaSyDeml0n3gDi6Iy4Q02lp1t_r3NX2YYZLjI',
+    appId: '1:636141818622:android:6f0ef52eb8e7f0d7c04baf',
+    messagingSenderId: '636141818622',
+    projectId: 'expends-staging',
+    storageBucket: 'expends-staging.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAlj4xWVhkjpVGEHrPcV9I1fgkl_DzoyMI',
-    appId: '1:884504518933:ios:75c4f3ebaa950aaa1cc91c',
-    messagingSenderId: '884504518933',
-    projectId: 'expends-app',
-    storageBucket: 'expends-app.appspot.com',
+    apiKey: 'AIzaSyAOW1NrgzW-zYI7jIgifwHhsjr0-ffeUIU',
+    appId: '1:636141818622:ios:97d311890892e160c04baf',
+    messagingSenderId: '636141818622',
+    projectId: 'expends-staging',
+    storageBucket: 'expends-staging.appspot.com',
+    androidClientId:
+        '636141818622-jcihjsm7hhuq0a0vd5sl6mmq2d43v8lr.apps.googleusercontent.com',
+    iosClientId:
+        '636141818622-6e09enifmf202fifgmnvk4hgj3t6rlod.apps.googleusercontent.com',
     iosBundleId: 'com.example.expenseTrackerApp',
   );
 }

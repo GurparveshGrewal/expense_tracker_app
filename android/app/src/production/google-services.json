@@ -1,45 +1,81 @@
 {
   "project_info": {
-    "project_number": "225764626365",
-    "project_id": "expends-app-prod",
-    "storage_bucket": "expends-app-prod.appspot.com"
+    "project_number": "267337617674",
+    "project_id": "expends-production",
+    "storage_bucket": "expends-production.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:225764626365:android:610fa96c2bca55e5538cd4",
+        "mobilesdk_app_id": "1:267337617674:android:c1cb6e6b9d321d16d16af3",
         "android_client_info": {
-          "package_name": "com.example.expense_tracker_app"
+          "package_name": "com.skyvision.expense_tracker_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "225764626365-ptt0r8ci3o501pn1lv7f4au2vujmb5t6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.expense_tracker_app",
-            "certificate_hash": "52213e5cdf4575337424d3b1fd04bf02a28ea210"
-          }
-        },
-        {
-          "client_id": "225764626365-s6ovlct2mnkkht65febaiik63j3cfor0.apps.googleusercontent.com",
+          "client_id": "267337617674-j49c17p6fvveq3rrd45vp4ou5vr2aibe.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCFtSnXuD20Jd2JZMIZ-sYtd8GO_56gpDA"
+          "current_key": "AIzaSyD57eWSKG4LT-J3TTMQwj2pml6M-i9LfnM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "225764626365-s6ovlct2mnkkht65febaiik63j3cfor0.apps.googleusercontent.com",
+              "client_id": "267337617674-j49c17p6fvveq3rrd45vp4ou5vr2aibe.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "225764626365-m7ehvpt25n51282rr2rnv08omomud37v.apps.googleusercontent.com",
+              "client_id": "267337617674-cs1i77c8d40l5rool6ogqdk4h9he3h2s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.expenseTrackerApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267337617674:android:b77d77e42864ddf7d16af3",
+        "android_client_info": {
+          "package_name": "com.skyvision.expense_tracker_app.prod"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267337617674-ubddsr6i0phi8mol6gr0rc93848t29r2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.skyvision.expense_tracker_app.prod",
+            "certificate_hash": "0d0201b74631e5f1aefaf741b672a1069cf8e22b"
+          }
+        },
+        {
+          "client_id": "267337617674-j49c17p6fvveq3rrd45vp4ou5vr2aibe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD57eWSKG4LT-J3TTMQwj2pml6M-i9LfnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267337617674-j49c17p6fvveq3rrd45vp4ou5vr2aibe.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "267337617674-cs1i77c8d40l5rool6ogqdk4h9he3h2s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.expenseTrackerApp"
